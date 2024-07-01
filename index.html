@@ -3,37 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Textbook</title>
+    <title>Module Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #0073e6;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .year {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            padding: 20px;
+        }
+        .year h2 {
+            border-bottom: 2px solid #0073e6;
+            padding-bottom: 10px;
+        }
+        .subsection {
+            margin: 15px 0;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Math Textbook</h1>
-        <nav>
-            <ul>
-                <li><a href="#Year1">Section 1</a></li>
-                <li><a href="#Year2">Section 2</a></li>
-                <li><a href="#Year3">Section 3</a></li>
-                <!-- Add more sections as needed -->
-            </ul>
-        </nav>
+        <h1>Module Map</h1>
     </header>
-    <main>
-        <section id="Year1">
-            <h2>Section 1: Introduction to University Maths</h2>
-            <p>This section covers basic algebraic concepts.</p>
-        </section>
-        <section id="Year2">
-            <h2>Section 2: Analysis 2</h2>
-            <p>Explore foundational geometry principles.</p>
-        </section>
-        <section id="Year3">
-            <h2>Section 3: Algebra 3</h2>
-            <p>Learn key calculus techniques and applications.</p>
-        </section>
-        <!-- Add more sections with content -->
-    </main>
+    <nav>
+        <a href="#year1">Year 1</a>
+        <a href="#year2">Year 2</a>
+        <a href="#year3">Year 3</a>
+    </nav>
+    <div class="container">
+        <div class="year" id="year1">
+            <h2>Year 1</h2>
+            <div class="subsection">
+                <h3>Introduction to University Maths (IUM)</h3>
+                <ul>
+                    <li><strong>Overview:</strong> Introduction to fundamental mathematical concepts.</li>
+                    <li><strong>Highlights:</strong> Key concepts and important theorems covered in this module.</li>
+                    <li><strong>Link to other courses:</strong> How this course connects to others in the curriculum.</li>
+                    <li><strong>Courses to consider next:</strong> Recommended follow-up courses after completing IUM.</li>
+                    <li><strong>Assessment information:</strong> Details on exams, assignments, and grading.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="year" id="year2">
+            <h2>Year 2</h2>
+            <p>Content for Year 2 will go here.</p>
+        </div>
+        <div class="year" id="year3">
+            <h2>Year 3</h2>
+            <p>Content for Year 3 will go here.</p>
+        </div>
+    </div>
     <footer>
-        <p>&copy; 2024 Your Name</p>
+        <p>Module Map &copy; 2024</p>
     </footer>
 </body>
 </html>
