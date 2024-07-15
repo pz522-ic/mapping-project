@@ -7,134 +7,271 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
         }
         .tab {
-            padding: 10px 20px;
-            background-color: #ddd;
-            border: 1px solid #ccc;
-            cursor: pointer;
+            display: none;
         }
         .tab.active {
-            background-color: #fff;
-            border-bottom: none;
-        }
-        .tab-content {
-            display: none;
-            background-color: #fff;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-        .tab-content.active {
             display: block;
         }
-        .module-box {
+        .tab-header {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f1f1f1;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .tab-content {
+            padding: 20px;
+        }
+        .module-card {
             border: 2px solid #4CAF50;
             padding: 10px;
             border-radius: 10px;
-            text-align: left;
-            margin-bottom: 10px;
-            width: 100%;
-            background-color: #e7f9e7;
-        }
-        .module-box h3 {
             margin-bottom: 10px;
         }
-        .module-box p {
-            margin-bottom: 5px;
+        .module-card h3 {
+            margin-bottom: 10px;
+        }
+        .prereq-card {
+            border: 2px solid #FF5733;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .year-card {
+            border: 2px solid #00BFFF;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Module Management System</h1>
-        </div>
-        <div class="tabs">
-            <div class="tab active" onclick="showTabContent(0)">Modules Completed</div>
-            <div class="tab" onclick="showTabContent(1)">Modules Wanted</div>
-            <div class="tab" onclick="showTabContent(2)">Module Information</div>
-            <div class="tab" onclick="showTabContent(3)">Module Relationships</div>
-        </div>
-        <div id="tab-content-0" class="tab-content active">
-            <h2>Modules Completed</h2>
-            <label for="completed-modules">Select the modules you have completed:</label>
-            <select id="completed-modules" multiple></select>
-            <h3>Modules you can take next:</h3>
-            <div id="available-modules"></div>
-        </div>
-        <div id="tab-content-1" class="tab-content">
-            <h2>Modules Wanted</h2>
-            <label for="wanted-modules">Select the modules you want to take:</label>
-            <select id="wanted-modules" multiple></select>
-            <h3>Prerequisites needed:</h3>
-            <div id="prerequisite-modules"></div>
-        </div>
-        <div id="tab-content-2" class="tab-content">
-            <h2>Module Information by Year</h2>
-            <div id="module-information"></div>
-        </div>
-        <div id="tab-content-3" class="tab-content">
-            <h2>Module Relationships</h2>
-            <div id="module-graph"></div>
+
+<h1>Module Management System</h1>
+
+<div class="tab-header">
+    <div class="tab-link" data-tab="tab1">Modules Completed</div>
+    <div class="tab-link" data-tab="tab2">Modules Wanted</div>
+    <div class="tab-link" data-tab="tab3">Module Information</div>
+    <div class="tab-link" data-tab="tab4">Module Relationships</div>
+</div>
+
+<div id="tab1" class="tab active">
+    <div class="tab-content">
+        <h2>Modules Completed</h2>
+        <p>Select the modules you have completed:</p>
+        <select id="completed-modules" multiple>
+            <!-- Options will be populated by JavaScript -->
+        </select>
+        <h3>Modules you can take next:</h3>
+        <div id="available-modules">
+            <!-- Available modules will be displayed here -->
         </div>
     </div>
+</div>
 
-    <script>
-        const modulesDb = {
-            "Mathematics I": { "prerequisites": [], "summary": "Introduction to basic concepts in mathematics.", "term": "Autumn", "lecturer": "Dr. Alice Smith" },
-            "Mathematics II": { "prerequisites": ["Mathematics I"], "summary": "Advanced topics in mathematics.", "term": "Spring", "lecturer": "Dr. Bob Jones" },
-            "Physics I": { "prerequisites": [], "summary": "Fundamentals of physics.", "term": "Autumn", "lecturer": "Dr. Carol White" },
-            "Physics II": { "prerequisites": ["Physics I"], "summary": "Continuation of Physics I.", "term": "Spring", "lecturer": "Dr. Dan Brown" },
-            "Computer Science I": { "prerequisites": [], "summary": "Introduction to computer science.", "term": "Autumn", "lecturer": "Dr. Eve Black" },
-            "Computer Science II": { "prerequisites": ["Computer Science I"], "summary": "Advanced topics in computer science.", "term": "Spring", "lecturer": "Dr. Frank Green" },
-            "Algorithms": { "prerequisites": ["Computer Science I"], "summary": "Study of algorithms.", "term": "Autumn", "lecturer": "Dr. Grace Miller" },
-            "Data Structures": { "prerequisites": ["Computer Science I"], "summary": "Study of data structures.", "term": "Spring", "lecturer": "Dr. Henry Wilson" },
-            "Machine Learning": { "prerequisites": ["Mathematics II", "Algorithms"], "summary": "Introduction to machine learning.", "term": "Autumn", "lecturer": "Dr. Irene Davis" },
-            "Artificial Intelligence": { "prerequisites": ["Data Structures"], "summary": "Study of artificial intelligence.", "term": "Spring", "lecturer": "Dr. Jack Clark" },
-            "Database Systems": { "prerequisites": ["Computer Science I"], "summary": "Introduction to database systems.", "term": "Autumn", "lecturer": "Dr. Karen Martinez" }
-        };
+<div id="tab2" class="tab">
+    <div class="tab-content">
+        <h2>Modules Wanted</h2>
+        <p>Select the modules you want to take:</p>
+        <select id="desired-modules" multiple>
+            <!-- Options will be populated by JavaScript -->
+        </select>
+        <h3>Prerequisites needed:</h3>
+        <div id="prerequisites">
+            <!-- Prerequisites will be displayed here -->
+        </div>
+    </div>
+</div>
 
-        const modulesByYear = {
-            "Year 1": ["Mathematics I", "Physics I", "Computer Science I"],
-            "Year 2": ["Mathematics II", "Physics II", "Computer Science II", "Algorithms", "Data Structures"],
-            "Year 3": ["Machine Learning", "Artificial Intelligence", "Database Systems"]
-        };
+<div id="tab3" class="tab">
+    <div class="tab-content">
+        <h2>Module Information by Year</h2>
+        <div id="modules-by-year">
+            <!-- Modules by year will be displayed here -->
+        </div>
+    </div>
+</div>
 
-        function showTabContent(index) {
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach((tabContent, i) => {
-                tabContent.classList.toggle('active', i === index);
+<div id="tab4" class="tab">
+    <div class="tab-content">
+        <h2>Module Relationships</h2>
+        <p>The following graph shows the relationships and prerequisites between modules.</p>
+        <div id="module-graph" style="height: 500px; background-color: #f9f9f9; border: 1px solid #ccc;">
+            <!-- Graph will be rendered here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    const modulesDb = {
+        "Mathematics I": {
+            "prerequisites": [],
+            "summary": "Introduction to basic concepts in mathematics.",
+            "term": "Autumn",
+            "lecturer": "Dr. Alice Smith"
+        },
+        "Mathematics II": {
+            "prerequisites": ["Mathematics I"],
+            "summary": "Advanced topics in mathematics.",
+            "term": "Spring",
+            "lecturer": "Dr. Bob Jones"
+        },
+        "Physics I": {
+            "prerequisites": [],
+            "summary": "Fundamentals of physics.",
+            "term": "Autumn",
+            "lecturer": "Dr. Carol White"
+        },
+        "Physics II": {
+            "prerequisites": ["Physics I"],
+            "summary": "Continuation of Physics I.",
+            "term": "Spring",
+            "lecturer": "Dr. Dan Brown"
+        },
+        "Computer Science I": {
+            "prerequisites": [],
+            "summary": "Introduction to computer science.",
+            "term": "Autumn",
+            "lecturer": "Dr. Eve Black"
+        },
+        "Computer Science II": {
+            "prerequisites": ["Computer Science I"],
+            "summary": "Advanced topics in computer science.",
+            "term": "Spring",
+            "lecturer": "Dr. Frank Green"
+        },
+        "Algorithms": {
+            "prerequisites": ["Computer Science I"],
+            "summary": "Study of algorithms.",
+            "term": "Autumn",
+            "lecturer": "Dr. Grace Miller"
+        },
+        "Data Structures": {
+            "prerequisites": ["Computer Science I"],
+            "summary": "Study of data structures.",
+            "term": "Spring",
+            "lecturer": "Dr. Henry Wilson"
+        },
+        "Machine Learning": {
+            "prerequisites": ["Mathematics II", "Algorithms"],
+            "summary": "Introduction to machine learning.",
+            "term": "Autumn",
+            "lecturer": "Dr. Irene Davis"
+        },
+        "Artificial Intelligence": {
+            "prerequisites": ["Data Structures"],
+            "summary": "Study of artificial intelligence.",
+            "term": "Spring",
+            "lecturer": "Dr. Jack Clark"
+        },
+        "Database Systems": {
+            "prerequisites": ["Computer Science I"],
+            "summary": "Introduction to database systems.",
+            "term": "Autumn",
+            "lecturer": "Dr. Karen Martinez"
+        },
+    };
+
+    const modulesByYear = {
+        "Year 1": ["Mathematics I", "Physics I", "Computer Science I"],
+        "Year 2": ["Mathematics II", "Physics II", "Computer Science II", "Algorithms", "Data Structures"],
+        "Year 3": ["Machine Learning", "Artificial Intelligence", "Database Systems"]
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Tab functionality
+        const tabLinks = document.querySelectorAll('.tab-link');
+        tabLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelector(`#${link.dataset.tab}`).classList.add('active');
             });
+        });
 
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach((tab, i) => {
-                tab.classList.toggle('active', i === index);
+        // Populate module options
+        const completedModulesSelect = document.getElementById('completed-modules');
+        const desiredModulesSelect = document.getElementById('desired-modules');
+        Object.keys(modulesDb).forEach(module => {
+            const option = document.createElement('option');
+            option.value = module;
+            option.textContent = module;
+            completedModulesSelect.appendChild(option.cloneNode(true));
+            desiredModulesSelect.appendChild(option);
+        });
+
+        // Handle completed modules selection
+        completedModulesSelect.addEventListener('change', () => {
+            const selectedModules = Array.from(completedModulesSelect.selectedOptions).map(option => option.value);
+            const availableModules = findAvailableModules(selectedModules, modulesDb);
+            const availableModulesDiv = document.getElementById('available-modules');
+            availableModulesDiv.innerHTML = '';
+            if (availableModules.length > 0) {
+                availableModules.forEach(module => {
+                    const moduleCard = document.createElement('div');
+                    moduleCard.classList.add('module-card');
+                    moduleCard.innerHTML = `
+                        <h3>${module}</h3>
+                        <p>${modulesDb[module].summary}</p>
+                        <p><strong>Term:</strong> ${modulesDb[module].term}</p>
+                        <p><strong>Lecturer:</strong> ${modulesDb[module].lecturer}</p>
+                    `;
+                    availableModulesDiv.appendChild(moduleCard);
+                });
+            } else {
+                availableModulesDiv.textContent = 'No available modules based on your current selections.';
+            }
+        });
+
+        // Handle desired modules selection
+        desiredModulesSelect.addEventListener('change', () => {
+            const selectedModules = Array.from(desiredModulesSelect.selectedOptions).map(option => option.value);
+            const prerequisites = getPrerequisites(selectedModules, modulesDb);
+            const prerequisitesDiv = document.getElementById('prerequisites');
+            prerequisitesDiv.innerHTML = '';
+            if (Object.keys(prerequisites).length > 0) {
+                Object.entries(prerequisites).forEach(([module, prereqs]) => {
+                    const prereqCard = document.createElement('div');
+                    prereqCard.classList.add('prereq-card');
+                    prereqCard.innerHTML = `
+                        <h3>${module}</h3>
+                        <p><strong>Prerequisites:</strong> ${prereqs.length ? prereqs.join(', ') : 'None'}</p>
+                    `;
+                    prerequisitesDiv.appendChild(prereqCard);
+                });
+            } else {
+                prerequisitesDiv.textContent = 'Select modules to see their prerequisites.';
+            }
+        });
+
+        // Display modules by year
+        const modulesByYearDiv = document.getElementById('modules-by-year');
+        Object.entries(modulesByYear).forEach(([year, modules]) => {
+            const yearCard = document.createElement('div');
+            yearCard.classList.add('year-card');
+            yearCard.innerHTML = `<h3>${year}</h3>`;
+            modules.forEach(module => {
+                yearCard.innerHTML += `
+                    <div>
+                        <h4>${module}</h4>
+                        <p><strong>Prerequisites:</strong> ${modulesDb[module].prerequisites.length ? modulesDb[module].prerequisites.join(', ') : 'None'}</p>
+                        <p><strong>Summary:</strong> ${modulesDb[module].summary}</p>
+                        <p><strong>Term:</strong> ${modulesDb[module].term}</p>
+                        <p><strong>Lecturer:</strong> ${modulesDb[module].lecturer}</p>
+                    </div>
+                `;
             });
-        }
+            modulesByYearDiv.appendChild(yearCard);
+        });
 
-        function findAvailableModules(completedModules) {
+        // Dummy function to find available modules
+        function findAvailableModules(completedModules, modulesDb) {
             const availableModules = [];
-            for (const module in modulesDb) {
-                const { prerequisites } = modulesDb[module];
+            for (const [module, details] of Object.entries(modulesDb)) {
                 if (!completedModules.includes(module)) {
+                    const prerequisites = details.prerequisites;
                     if (prerequisites.every(prereq => completedModules.includes(prereq))) {
                         availableModules.push(module);
                     }
@@ -143,24 +280,21 @@
             return availableModules;
         }
 
-        function getPrerequisites(modules) {
+        // Dummy function to get prerequisites for desired modules
+        function getPrerequisites(modules, modulesDb) {
             const prerequisites = {};
-            for (const module of modules) {
-                prerequisites[module] = modulesDb[module]?.prerequisites || [];
-            }
+            modules.forEach(module => {
+                prerequisites[module] = modulesDb[module].prerequisites || [];
+            });
             return prerequisites;
         }
 
-        function populateSelectOptions(selectElement, options) {
-            selectElement.innerHTML = '';
-            options.forEach(option => {
-                const opt = document.createElement('option');
-                opt.value = option;
-                opt.textContent = option;
-                selectElement.appendChild(opt);
-            });
-        }
+        // Graph rendering placeholder
+        // You can use a library like D3.js or Cytoscape.js to render the graph
+        const moduleGraphDiv = document.getElementById('module-graph');
+        moduleGraphDiv.textContent = 'Graph rendering not implemented in this example.';
+    });
+</script>
 
-        function displayModules(modules, containerId) {
-            const container = document.getElementById(containerId);
-            container.inner
+</body>
+</html>
