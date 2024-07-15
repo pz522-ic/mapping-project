@@ -163,34 +163,4 @@
 
         function displayModules(modules, containerId) {
             const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            modules.forEach(module => {
-                const moduleBox = document.createElement('div');
-                moduleBox.className = 'module-box';
-                moduleBox.innerHTML = `
-                    <h3>${module}</h3>
-                    <p><strong>Summary:</strong> ${modulesDb[module].summary}</p>
-                    <p><strong>Term:</strong> ${modulesDb[module].term}</p>
-                    <p><strong>Lecturer:</strong> ${modulesDb[module].lecturer}</p>
-                `;
-                container.appendChild(moduleBox);
-            });
-        }
-
-        function displayModuleInformation() {
-            const container = document.getElementById('module-information');
-            container.innerHTML = '';
-            for (const year in modulesByYear) {
-                const expander = document.createElement('div');
-                expander.className = 'module-box';
-                expander.innerHTML = `<h3>${year}</h3>`;
-                const modules = modulesByYear[year];
-                modules.forEach(module => {
-                    const moduleBox = document.createElement('div');
-                    moduleBox.className = 'module-box';
-                    moduleBox.style.border = '2px solid #00BFFF';
-                    moduleBox.innerHTML = `
-                        <h3>${module}</h3>
-                        <p><strong>Prerequisites:</strong> ${modulesDb[module].prerequisites.join(', ') || 'None'}</p>
-                        <p><strong>Summary:</strong> ${modulesDb[module].summary}</p>
-                        <p><strong>Term:</strong> ${
+            container.inner
