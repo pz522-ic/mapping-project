@@ -4,78 +4,89 @@ import matplotlib.pyplot as plt
 
 # Sample database of modules
 modules_db = {
-    "Mathematics I": {
+    "Analysis I": {
         "prerequisites": [],
         "summary": "Introduction to basic concepts in mathematics.",
-        "term": "Autumn",
-        "lecturer": "Dr. Alice Smith"
+        "term": "Autumn and Spring",
+        "lecturer": "Dr. Alice Smith",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Mathematics II": {
+    "Linear Algebra and Groups": {
         "prerequisites": ["Mathematics I"],
         "summary": "Advanced topics in mathematics.",
-        "term": "Spring",
-        "lecturer": "Dr. Bob Jones"
+        "term": "Autumn and Spring",
+        "lecturer": "Dr. Bob Jones",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Physics I": {
+    "Introduction to University Math": {
         "prerequisites": [],
         "summary": "Fundamentals of physics.",
         "term": "Autumn",
-        "lecturer": "Dr. Carol White"
+        "lecturer": "Dr. Carol White",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Physics II": {
+    "Linear Algebra adn Numerical Analysis": {
         "prerequisites": ["Physics I"],
         "summary": "Continuation of Physics I.",
         "term": "Spring",
-        "lecturer": "Dr. Dan Brown"
+        "lecturer": "Dr. Dan Brown",
+        "assessments": ["Exam", "Coursework"]
     },
     "Computer Science I": {
         "prerequisites": [],
         "summary": "Introduction to computer science.",
         "term": "Autumn",
-        "lecturer": "Dr. Eve Black"
+        "lecturer": "Dr. Eve Black",
+        "assessments": ["Exam", "Coursework"]
     },
     "Computer Science II": {
         "prerequisites": ["Computer Science I"],
         "summary": "Advanced topics in computer science.",
         "term": "Spring",
-        "lecturer": "Dr. Frank Green"
+        "lecturer": "Dr. Frank Green",
+        "assessments": ["Exam", "Coursework"]
     },
     "Algorithms": {
         "prerequisites": ["Computer Science I"],
         "summary": "Study of algorithms.",
         "term": "Autumn",
-        "lecturer": "Dr. Grace Miller"
+        "lecturer": "Dr. Grace Miller",
+        "assessments": ["Exam", "Coursework"]
     },
     "Data Structures": {
         "prerequisites": ["Computer Science I"],
         "summary": "Study of data structures.",
         "term": "Spring",
-        "lecturer": "Dr. Henry Wilson"
+        "lecturer": "Dr. Henry Wilson",
+        "assessments": ["Exam", "Coursework"]
     },
     "Machine Learning": {
         "prerequisites": ["Mathematics II", "Algorithms"],
         "summary": "Introduction to machine learning.",
         "term": "Autumn",
-        "lecturer": "Dr. Irene Davis"
+        "lecturer": "Dr. Irene Davis",
+        "assessments": ["Exam", "Coursework"]
     },
     "Artificial Intelligence": {
         "prerequisites": ["Data Structures"],
         "summary": "Study of artificial intelligence.",
         "term": "Spring",
-        "lecturer": "Dr. Jack Clark"
+        "lecturer": "Dr. Jack Clark",
+        "assessments": ["Exam", "Coursework"]
     },
     "Database Systems": {
         "prerequisites": ["Computer Science I"],
         "summary": "Introduction to database systems.",
         "term": "Autumn",
-        "lecturer": "Dr. Karen Martinez"
+        "lecturer": "Dr. Karen Martinez",
+        "assessments": ["Exam", "Coursework"]
     },
 }
 
 # Organize modules by year
 modules_by_year = {
-    "Year 1": ["Mathematics I", "Physics I", "Computer Science I"],
-    "Year 2": ["Mathematics II", "Physics II", "Computer Science II", "Algorithms", "Data Structures"],
+    "Year 1": ["Analysis I", "Linear Algebra and Groups", "Introduction to University Math"],
+    "Year 2": ["Analysis II", "Linear Algebra adn Numerical Analysis", "Computer Science II", "Algorithms", "Data Structures"],
     "Year 3": ["Machine Learning", "Artificial Intelligence", "Database Systems"]
 }
 
@@ -110,32 +121,30 @@ def draw_module_graph(modules_db):
 st.title("Module Management System")
 
 # Create tabs
-tab1, tab2, tab3, tab4 = st.tabs(["Modules Completed", "Modules Wanted", "Module Information", "Module Relationships"])
+tab1, tab2, tab3, tab4 = st.tabs(["Module Information", "Module Relationships", "Modules Wanted", "Assessment Information"])
 
 with tab1:
-    st.header("Modules Completed")
-    # User selects completed modules
-    completed_modules = st.multiselect("Select the modules you have completed:", options=list(modules_db.keys()))
-
-    # Find available modules based on completed modules
-    available_modules = find_available_modules(completed_modules, modules_db)
-
-    # Display available modules
-    st.subheader("Modules you can take next:")
-    if available_modules:
-        for module in available_modules:
-            st.markdown(f"""
-            <div style="border: 2px solid #4CAF50; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                <h3 style="margin-bottom: 10px;">{module}</h3>
-                <p style="margin-bottom: 5px;">{modules_db[module]['summary']}</p>
-                <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.write("No available modules based on your current selections.")
+    st.header("Module Information by Year")
+    # Display modules by year
+    for year, modules in modules_by_year.items():
+        with st.expander(year):
+            for module in modules:
+                st.markdown(f"""
+                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                    <h3 style="margin-bottom: 10px;">{module}</h3>
+                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
+                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
 with tab2:
+    st.header("Module Relationships")
+    st.write("The following graph shows the relationships and prerequisites between modules.")
+    draw_module_graph(modules_db)
+
+with tab3:
     st.header("Modules Wanted")
     # User selects desired modules
     desired_modules = st.multiselect("Select the modules you want to take:", options=list(modules_db.keys()))
@@ -156,23 +165,14 @@ with tab2:
     else:
         st.write("Select modules to see their prerequisites.")
 
-with tab3:
-    st.header("Module Information by Year")
-    # Display modules by year
-    for year, modules in modules_by_year.items():
-        with st.expander(year):
-            for module in modules:
-                st.markdown(f"""
-                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                    <h3 style="margin-bottom: 10px;">{module}</h3>
-                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-
 with tab4:
-    st.header("Module Relationships")
-    st.write("The following graph shows the relationships and prerequisites between modules.")
-    draw_module_graph(modules_db)
+    st.header("Assessment Information")
+    # Display assessment information for each module
+    for module, details in modules_db.items():
+        assessments = details.get("assessments", [])
+        st.markdown(f"""
+        <div style="border: 2px solid #FFD700; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+            <h3 style="margin-bottom: 10px;">{module}</h3>
+            <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {', '.join(assessments) if assessments else 'None'}</p>
+        </div>
+        """, unsafe_allow_html=True)
