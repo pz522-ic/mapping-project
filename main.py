@@ -1,342 +1,472 @@
 import streamlit as st
+import networkx as nx
+import matplotlib.pyplot as plt
 
-# Define module database
+# Updated database of modules
 modules_db = {
     "Introduction to University Math (MATH40001/40009)": {
         "prerequisites": [],
-        "summary": "Introduction to university-level mathematics.",
+        "summary": "Introduction to university mathematics.",
         "term": "Autumn",
-        "lecturer": "John Smith",
-        "assessments": ["Exam"],
-        "type": "Core"
+        "lecturer": "Marie Amalie Lawn, Eva-Marie Graefe, Charlotte Kestner",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
     },
     "Analysis I (MATH40002)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Introduction to analysis and calculus.",
-        "term": "Spring",
-        "lecturer": "Emma Johnson",
+        "prerequisites": [],
+        "summary": "Introduction to analysis.",
+        "term": "Autumn and Spring",
+        "lecturer": "Ajay Chandra (T1), Marco Guaraco (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Linear Algebra and Group Theory (MATH40003)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Fundamentals of linear algebra and group theory.",
-        "term": "Autumn",
-        "lecturer": "Michael Brown",
+        "prerequisites": [],
+        "summary": "Introduction to linear algebra and group theory.",
+        "term": "Autumn and Spring",
+        "lecturer": "Travis Schedler (T1), Michele Zordan (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Calculus and Applications (MATH40004)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Advanced calculus techniques and their applications.",
-        "term": "Spring",
-        "lecturer": "Sophia Wilson",
+        "prerequisites": [],
+        "summary": "Introduction to calculus and its applications.",
+        "term": "Autumn and Spring",
+        "lecturer": "Demetrios Papageorgiou (T1), Vahid Shahrezaei (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Probability and Statistics (MATH40005)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Introduction to probability theory and statistical methods.",
-        "term": "Autumn",
-        "lecturer": "David Thompson",
+        "prerequisites": [],
+        "summary": "Introduction to probability and statistics.",
+        "term": "Autumn and Spring",
+        "lecturer": "Ioanna Papatsouma (T1), Dean Bodenham (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Introduction to Computation (MATH40006)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Introduction to computational mathematics.",
-        "term": "Spring",
-        "lecturer": "Olivia Martinez",
+        "prerequisites": [],
+        "summary": "Introduction to computation.",
+        "term": "Autumn",
+        "lecturer": "Phil Ramsden",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "An Introduction to Applied Maths (MATH40007)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Applications of mathematics in various fields.",
+        "prerequisites": [],
+        "summary": "Introduction to applied mathematics.",
         "term": "Autumn",
-        "lecturer": "Ethan Davis",
+        "lecturer": "Darren Crowdy",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "M1R (MATH40008)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Mathematical reasoning and proof techniques.",
-        "term": "Spring",
-        "lecturer": "Isabella Clark",
+        "prerequisites": [],
+        "summary": "Mathematics 1 Revision.",
+        "term": "To be confirmed",
+        "lecturer": "Michele Zordan",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Linear Algebra (JMC) (MATH40012)": {
-        "prerequisites": ["Introduction to University Math (MATH40001/40009)"],
-        "summary": "Linear algebra taught in the Joint Mathematics Centre.",
-        "term": "Autumn",
-        "lecturer": "James Lee",
+        "prerequisites": [],
+        "summary": "Linear Algebra for JMC students.",
+        "term": "Autumn and Spring",
+        "lecturer": "Benjamin Briggs (T1) Alexei Skorobogatov (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Core"
+        "type": "Compulsory"
     },
     "Analysis 2: Real Analysis and Topology (MATH50001/50017)": {
-        "prerequisites": ["Analysis I (MATH40002)"],
+        "prerequisites": ["Analysis I"],
         "summary": "Advanced real analysis and topology.",
-        "term": "Spring",
-        "lecturer": "Rachel Green",
+        "term": "Autumn",
+        "lecturer": "Davoud Cheraghi (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Analysis 2: Complex Analysis (MATH50001/50018)": {
-        "prerequisites": ["Analysis I (MATH40002)"],
-        "summary": "Advanced complex analysis techniques.",
-        "term": "Autumn",
-        "lecturer": "Monica Geller",
+        "prerequisites": ["Analysis I"],
+        "summary": "Complex analysis.",
+        "term": "Spring",
+        "lecturer": "Nattalie Tamam (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "M2R (MATH50002/MATH50014)": {
-        "prerequisites": ["Analysis I (MATH40002)"],
-        "summary": "Research methods in mathematics.",
-        "term": "Spring",
-        "lecturer": "Ross Geller",
+        "prerequisites": [],
+        "summary": "Mathematics 2 Revision.",
+        "term": "Autumn and Spring",
+        "lecturer": "Thibault Bertrand",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Linear Algebra (MATH50003/50012)": {
-        "prerequisites": ["Linear Algebra and Group Theory (MATH40003)"],
-        "summary": "Advanced linear algebra techniques.",
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Advanced linear algebra.",
         "term": "Autumn",
-        "lecturer": "Chandler Bing",
+        "lecturer": "Martin Liebeck (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Numerical Analysis (MATH50003/50016)": {
-        "prerequisites": ["Linear Algebra and Group Theory (MATH40003)"],
-        "summary": "Numerical methods in mathematical analysis.",
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Numerical methods for solving mathematical problems.",
         "term": "Spring",
-        "lecturer": "Phoebe Buffay",
+        "lecturer": "Sheehan Olver (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Multivariable Calculus (MATH50004/50015)": {
-        "prerequisites": ["Calculus and Applications (MATH40004)"],
-        "summary": "Advanced calculus in multiple dimensions.",
+        "prerequisites": ["Calculus and Applications"],
+        "summary": "Multivariable calculus.",
         "term": "Autumn",
-        "lecturer": "Joey Tribbiani",
+        "lecturer": "Andrew Walton (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Differential Equations (MATH50004/50019)": {
-        "prerequisites": ["Calculus and Applications (MATH40004)"],
-        "summary": "Advanced differential equations.",
+        "prerequisites": ["Calculus and Applications"],
+        "summary": "Introduction to differential equations.",
         "term": "Spring",
-        "lecturer": "Rachel Green",
+        "lecturer": "Martin Rasmussen (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Groups and Rings (MATH50005)": {
-        "prerequisites": ["Linear Algebra and Group Theory (MATH40003)"],
-        "summary": "Group theory and ring theory.",
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Study of groups and rings.",
         "term": "Autumn",
-        "lecturer": "Monica Geller",
+        "lecturer": "Tom Coates (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Lebesgue Measure and Integration (MATH50006)": {
-        "prerequisites": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)"],
-        "summary": "Advanced measure theory and integration.",
+        "prerequisites": ["Analysis I"],
+        "summary": "Lebesgue measure theory and integration.",
         "term": "Spring",
-        "lecturer": "Ross Geller",
+        "lecturer": "Pierre-Francois Rodriguez (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Network Science (MATH50007)": {
-        "prerequisites": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)"],
+        "prerequisites": [],
         "summary": "Introduction to network science.",
-        "term": "Autumn",
-        "lecturer": "Chandler Bing",
+        "term": "Spring",
+        "lecturer": "Sarah Ferguson-Briggs (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "PDEs in Action (MATH50008)": {
-        "prerequisites": ["Differential Equations (MATH50004/50019)"],
-        "summary": "Applications of partial differential equations.",
+        "prerequisites": [],
+        "summary": "Partial differential equations in action.",
         "term": "Spring",
-        "lecturer": "Phoebe Buffay",
+        "lecturer": "Thibault Bertrand (T2)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Principles of Programming (MATH50009)": {
-        "prerequisites": ["Introduction to Computation (MATH40006)"],
-        "summary": "Fundamentals of programming principles.",
+        "prerequisites": [],
+        "summary": "Principles of programming.",
         "term": "Autumn",
-        "lecturer": "Joey Tribbiani",
+        "lecturer": "David Ham (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Probability for Statistics (MATH50010)": {
-        "prerequisites": ["Probability and Statistics (MATH40005)"],
-        "summary": "Probability theory for statistical applications.",
-        "term": "Spring",
-        "lecturer": "Rachel Green",
+        "prerequisites": [],
+        "summary": "Probability theory for statistics.",
+        "term": "Autumn",
+        "lecturer": "Ciara Pike-Burke (T1)",
         "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "type": "Compulsory"
     },
     "Statistical Modelling 1 (MATH50011)": {
-        "prerequisites": ["Probability and Statistics (MATH40005)"],
-        "summary": "Statistical modeling techniques.",
+        "prerequisites": [],
+        "summary": "Introduction to statistical modelling.",
+        "term": "Spring",
+        "lecturer": "Riccardo Passeggeri (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Probability (JMC) (MATH50013)": {
+        "prerequisites": [],
+        "summary": "Probability for JMC students.",
         "term": "Autumn",
-        "lecturer": "Monica Geller",
+        "lecturer": "Tomasz Kosmala (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Machine Learning (MATH60001)": {
+        "prerequisites": ["Multivariable Calculus", "Linear Algebra and Group Theory"],
+        "summary": "Introduction to machine learning.",
+        "term": "Autumn",
+        "lecturer": "Irene Davis",
         "assessments": ["Exam", "Coursework"],
         "type": "Optional"
     },
-    "Probability (JMC) (MATH50013)": {
-        "prerequisites": ["Probability and Statistics (MATH40005)"],
-        "summary": "Probability theory taught in the Joint Mathematics Centre.",
+    "Galois Theory (MATH60002)": {
+        "prerequisites": ["Groups and Rings"],
+        "summary": "Advanced Galois theory.",
         "term": "Spring",
-        "lecturer": "Ross Geller",
+        "lecturer": "Jack Clark",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Optional"
+    },
+    "Fluid Dynamics I (MATH60003)": {
+        "prerequisites": ["Differential Equations"],
+        "summary": "Introduction to fluid dynamics.",
+        "term": "Autumn",
+        "lecturer": "Karen Martinez",
         "assessments": ["Exam", "Coursework"],
         "type": "Optional"
     }
 }
 
-# Define module categories by year
+# Organize modules by year
 modules_by_year = {
-    "Year 1": ["Introduction to University Math (MATH40001/40009)", "Analysis I (MATH40002)", "Linear Algebra and Group Theory (MATH40003)", "Calculus and Applications (MATH40004)", "Probability and Statistics (MATH40005)", "Introduction to Computation (MATH40006)", "An Introduction to Applied Maths (MATH40007)", "M1R (MATH40008)", "Linear Algebra (JMC) (MATH40012)"],
-    "Year 2": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Groups and Rings (MATH50005)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+    "Year 1": [
+        "Introduction to University Math (MATH40001/40009)",
+        "Analysis I (MATH40002)",
+        "Linear Algebra and Group Theory (MATH40003)",
+        "Calculus and Applications (MATH40004)",
+        "Probability and Statistics (MATH40005)",
+        "Introduction to Computation (MATH40006)",
+        "An Introduction to Applied Maths (MATH40007)",
+        "M1R (MATH40008)",
+        "Linear Algebra (JMC) (MATH40012)"
+    ],
+    "Year 2": [
+        "Analysis 2: Real Analysis and Topology (MATH50001/50017)",
+        "Analysis 2: Complex Analysis (MATH50001/50018)",
+        "M2R (MATH50002/MATH50014)",
+        "Linear Algebra (MATH50003/50012)",
+        "Numerical Analysis (MATH50003/50016)",
+        "Multivariable Calculus (MATH50004/50015)",
+        "Differential Equations (MATH50004/50019)",
+        "Groups and Rings (MATH50005)",
+        "Lebesgue Measure and Integration (MATH50006)",
+        "Network Science (MATH50007)",
+        "PDEs in Action (MATH50008)",
+        "Principles of Programming (MATH50009)",
+        "Probability for Statistics (MATH50010)",
+        "Statistical Modelling 1 (MATH50011)",
+        "Probability (JMC) (MATH50013)"
+    ],
+    "Year 3": [
+        "Machine Learning (MATH60001)",
+        "Galois Theory (MATH60002)",
+        "Fluid Dynamics I (MATH60003)"
+    ]
 }
 
-# Define degree information
-degrees_info = {
+# Degree information
+degree_info = {
     "G100": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Groups and Rings (MATH50005)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
         }
     },
     "G102": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Network Science (MATH50007)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Network Science (MATH50007)", "Principles of Programming (MATH50009)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Network Science", "Principles of Programming"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G125": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Lebesgue Measure and Integration (MATH50006)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Lebesgue Measure and Integration (MATH50006)", "Groups and Rings (MATH50005)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G1F3": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Partial Differential Equations in Action (MATH50008)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Partial Differential Equations in Action (MATH50008)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Partial Differential Equations in Action"],
+            "group_b": "Choose 3 modules from Group B"
         }
     },
     "G1G3": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Probability for Statistics (MATH50010)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G1GH": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Probability for Statistics (MATH50010)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "GG31": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Probability for Statistics (MATH50010)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G103": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Groups and Rings (MATH50005)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability for Statistics (MATH50010)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
         }
     },
     "G104": {
-        "Year 2": {
-            "Group A": ["Analysis 2: Real Analysis and Topology (MATH50001/50017)", "Probability (JMC) (MATH50013)"],
-            "Group B": ["Analysis 2: Complex Analysis (MATH50001/50018)", "M2R (MATH50002/MATH50014)", "Linear Algebra (MATH50003/50012)", "Numerical Analysis (MATH50003/50016)", "Multivariable Calculus (MATH50004/50015)", "Differential Equations (MATH50004/50019)", "Lebesgue Measure and Integration (MATH50006)", "Network Science (MATH50007)", "PDEs in Action (MATH50008)", "Principles of Programming (MATH50009)", "Statistical Modelling 1 (MATH50011)"],
-            "Core": ["Probability (JMC) (MATH50013)", "Statistical Modelling 1 (MATH50011)"]
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A (language module if required)",
+            "group_b": "Choose 4 modules from Group B"
         }
     }
 }
 
-# Main content
-st.title("Mathematics Degree Information")
+def find_available_modules(completed_modules, modules_db):
+    available_modules = []
+    for module, details in modules_db.items():
+        prerequisites = details["prerequisites"]
+        if module not in completed_modules:
+            if all(prereq in completed_modules for prereq in prerequisites):
+                available_modules.append(module)
+    return available_modules
 
-# Sidebar navigation
-menu_options = ["Home", "Assessment Information", "Module Wanted", "Module Taken"]
-menu_choice = st.sidebar.selectbox("Select an option", menu_options)
+def get_prerequisites(modules, modules_db):
+    prerequisites = {}
+    for module in modules:
+        prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
+    return prerequisites
 
-# Home page
-if menu_choice == "Home":
-    st.header("Welcome to Mathematics Degree Information")
-    st.subheader("Choose a tab to view information.")
+def draw_module_graph(modules_db):
+    G = nx.DiGraph()
+    for module, details in modules_db.items():
+        for prereq in details["prerequisites"]:
+            G.add_edge(prereq, module)
 
-# Assessment Information tab
-elif menu_choice == "Assessment Information":
-    st.header("Assessment Information")
-    st.write("Here you can find assessment details for various modules.")
-    selected_module = st.selectbox("Select a module", list(modules_db.keys()))
-    st.subheader(f"Assessment details for {selected_module}:")
-    module_info = modules_db[selected_module]
-    st.write(f"Summary: {module_info['summary']}")
-    st.write(f"Term: {module_info['term']}")
-    st.write(f"Lecturer: {module_info['lecturer']}")
-    st.write(f"Assessments: {', '.join(module_info['assessments'])}")
-    st.write(f"Type: {module_info['type']}")
+    pos = nx.spring_layout(G)
+    plt.figure(figsize=(10, 7))
+    nx.draw(G, pos, with_labels=True, node_size=3000, node_color='lightblue', font_size=10, font_weight='bold', edge_color='gray')
+    plt.title("Module Prerequisite Graph")
+    st.pyplot(plt)
 
-# Module Wanted tab
-elif menu_choice == "Module Wanted":
-    st.header("Module Wanted")
-    st.write("Select your desired module based on your degree requirements.")
+# Streamlit UI
+st.title("Module Management System")
 
-    # Degree selection
-    degree = st.selectbox("Select your degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
+# Create tabs
+tab1, tab2, tab3, tab4, tab5 = st.columns([0.1, 0.1, 0.1, 0.1, 0.1])
+with tab1:
+    tab_selected = st.radio("Navigation", ("Module Information", "Module Relationships", "Modules Wanted", "Assessment Information", "Degree Information"))
 
-    # Year selection (currently only Year 2 is supported)
-    year = "Year 2"
+if tab_selected == "Module Information":
+    with tab2:
+        st.header("Module Information by Year")
+        # Display modules by year
+        for year, modules in modules_by_year.items():
+            with st.expander(year):
+                for module in modules:
+                    st.markdown(f"""
+                    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                        <h3 style="margin-bottom: 10px;">{module}</h3>
+                        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
+                        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-    # Display groups and core modules for the selected degree and year
-    if degree in degrees_info and year in degrees_info[degree]:
-        st.subheader(f"Degree: {degree}, Year: {year}")
-        st.write("Choose modules according to your degree requirements.")
+elif tab_selected == "Module Relationships":
+    with tab3:
+        st.header("Module Relationships")
+        st.write("The following graph shows the relationships and prerequisites between modules.")
+        draw_module_graph(modules_db)
 
-        # Display Group A options
-        st.subheader("Group A (Select 1)")
-        group_a_selection = st.selectbox("Choose 1 module from Group A", degrees_info[degree][year]["Group A"])
+elif tab_selected == "Modules Wanted":
+    with tab4:
+        st.header("Modules Wanted")
+        # User input for desired modules
+        completed_modules = st.text_area("Enter modules completed (comma-separated)", "").split(",")
+        if completed_modules == ['']:
+            completed_modules = []
+        available_modules = find_available_modules(completed_modules, modules_db)
+        st.write("Available Modules:")
+        st.write(", ".join(available_modules))
 
-        # Display Group B options
-        st.subheader("Group B (Select 4)")
-        group_b_selections = st.multiselect("Choose 4 modules from Group B", degrees_info[degree][year]["Group B"])
+elif tab_selected == "Assessment Information":
+    with tab5:
+        st.header("Assessment Information")
+        st.write("Detailed assessment information will be added here.")
 
-        # Display core modules
-        if "Core" in degrees_info[degree][year]:
-            st.subheader("Core Modules")
-            core_modules = degrees_info[degree][year]["Core"]
-            for core_module in core_modules:
-                st.write(core_module)
+elif tab_selected == "Degree Information":
+    with tab2:
+        st.header("Degree Information")
 
-# Module Taken tab
-elif menu_choice == "Module Taken":
-    st.header("Module Taken")
-    st.write("Here you can view the modules you have already taken.")
+        # Dropdown for degree selection
+        degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
 
-    # Example of modules taken (replace with actual data)
-    modules_taken = ["Introduction to University Math (MATH40001/40009)", "Analysis I (MATH40002)"]
+        # Dropdown for year selection
+        year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
 
-    if modules_taken:
-        st.subheader("Modules Taken:")
-        for module in modules_taken:
-            st.write(module)
-    else:
-        st.write("No modules taken yet.")
+        if degree and year:
+            st.header(f"{degree} - Year {year}")
+
+            # Display degree-specific module selection guidelines
+            if degree in degree_info and year in degree_info[degree]:
+                st.subheader("Module Selection Guidelines")
+                if "core_modules" in degree_info[degree][year]:
+                    st.write("**Core Modules:**")
+                    for core_module in degree_info[degree][year]["core_modules"]:
+                        st.write(f"- {core_module}")
+                if "group_a" in degree_info[degree][year]:
+                    st.write("**Group A:**")
+                    st.write(degree_info[degree][year]["group_a"])
+                if "group_b" in degree_info[degree][year]:
+                    st.write("**Group B:**")
+                    st.write(degree_info[degree][year]["group_b"])
+
+            # Display modules available in the selected year
+            if year in modules_by_year:
+                st.subheader(f"Modules Available in {year}")
+                for module in modules_by_year[year]:
+                    st.markdown(f"""
+                    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                        <h3 style="margin-bottom: 10px;">{module}</h3>
+                        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
+                        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
+                        <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
