@@ -2,6 +2,8 @@ import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
+
 # Updated database of modules
 modules_db = {
     "Introduction to University Math (MATH40001/40009)": {
@@ -352,7 +354,7 @@ degree_info = {
         }
     }
 }
-
+# Function to find available modules based on completed ones
 def find_available_modules(completed_modules, modules_db):
     available_modules = []
     for module, details in modules_db.items():
@@ -362,12 +364,14 @@ def find_available_modules(completed_modules, modules_db):
                 available_modules.append(module)
     return available_modules
 
+# Function to get prerequisites for selected modules
 def get_prerequisites(modules, modules_db):
     prerequisites = {}
     for module in modules:
         prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
     return prerequisites
 
+# Function to draw a graph of module relationships
 def draw_module_graph(modules_db):
     G = nx.DiGraph()
     for module, details in modules_db.items():
@@ -384,89 +388,91 @@ def draw_module_graph(modules_db):
 st.title("Module Management System")
 
 # Create tabs
-tab1, tab2, tab3, tab4, tab5 = st.columns([0.1, 0.1, 0.1, 0.1, 0.1])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Modules Wanted", "Module Information", "Module Relationships", "Assessment Information", "Degree Information"])
+
 with tab1:
-    tab_selected = st.radio("Navigation", ("Module Information", "Module Relationships", "Modules Wanted", "Assessment Information", "Degree Information"))
+    st.header("Modules Wanted")
+    # User selects desired modules
+    desired_modules = st.multiselect("Select the modules you want to take:", options=list(modules_db.keys()))
 
-if tab_selected == "Module Information":
-    with tab2:
-        st.header("Module Information by Year")
-        # Display modules by year
-        for year, modules in modules_by_year.items():
-            with st.expander(year):
-                for module in modules:
-                    st.markdown(f"""
-                    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                        <h3 style="margin-bottom: 10px;">{module}</h3>
-                        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
-                    </div>
-                    """, unsafe_allow_html=True)
+    # Get prerequisites for desired modules
+    prerequisites = get_prerequisites(desired_modules, modules_db)
 
-elif tab_selected == "Module Relationships":
-    with tab3:
-        st.header("Module Relationships")
-        st.write("The following graph shows the relationships and prerequisites between modules.")
-        draw_module_graph(modules_db)
+    # Display prerequisites
+    st.subheader("Prerequisites needed:")
+    if prerequisites:
+        for module, prereqs in prerequisites.items():
+            st.markdown(f"""
+            <div style="border: 2px solid #FF5733; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                <h3 style="margin-bottom: 10px;">{module}</h3>
+                <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(prereqs) if prereqs else 'None'}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        st.write("Select modules to see their prerequisites.")
 
-elif tab_selected == "Modules Wanted":
-    with tab4:
-        st.header("Modules Wanted")
-        # User input for desired modules
-        completed_modules = st.text_area("Enter modules completed (comma-separated)", "").split(",")
-        if completed_modules == ['']:
-            completed_modules = []
-        available_modules = find_available_modules(completed_modules, modules_db)
-        st.write("Available Modules:")
-        st.write(", ".join(available_modules))
+with tab2:
+    st.header("Module Information by Year")
+    # Display modules by year
+    for year, modules in modules_by_year.items():
+        with st.expander(year):
+            for module in modules:
+                st.markdown(f"""
+                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                    <h3 style="margin-bottom: 10px;">{module}</h3>
+                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
+                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
-elif tab_selected == "Assessment Information":
-    with tab5:
-        st.header("Assessment Information")
-        st.write("Detailed assessment information will be added here.")
+with tab3:
+    st.header("Module Relationships")
+    st.write("The following graph shows the relationships and prerequisites between modules.")
+    draw_module_graph(modules_db)
 
-elif tab_selected == "Degree Information":
-    with tab2:
-        st.header("Degree Information")
+with tab4:
+    st.header("Assessment Information")
+    st.write("Detailed assessment information will be added here.")
 
-        # Dropdown for degree selection
-        degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
+with tab5:
+    st.header("Degree Information")
 
-        # Dropdown for year selection
-        year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
+    # Dropdown for degree selection
+    degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
 
-        if degree and year:
-            st.header(f"{degree} - Year {year}")
+    # Dropdown for year selection
+    year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
 
-            # Display degree-specific module selection guidelines
-            if degree in degree_info and year in degree_info[degree]:
-                st.subheader("Module Selection Guidelines")
-                if "core_modules" in degree_info[degree][year]:
-                    st.write("**Core Modules:**")
-                    for core_module in degree_info[degree][year]["core_modules"]:
-                        st.write(f"- {core_module}")
-                if "group_a" in degree_info[degree][year]:
-                    st.write("**Group A:**")
-                    st.write(degree_info[degree][year]["group_a"])
-                if "group_b" in degree_info[degree][year]:
-                    st.write("**Group B:**")
-                    st.write(degree_info[degree][year]["group_b"])
+    if degree and year:
+        st.header(f"{degree} - Year {year}")
 
-            # Display modules available in the selected year
-            if year in modules_by_year:
-                st.subheader(f"Modules Available in {year}")
-                for module in modules_by_year[year]:
-                    st.markdown(f"""
-                    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                        <h3 style="margin-bottom: 10px;">{module}</h3>
-                        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                        <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
-                    </div>
-                    """, unsafe_allow_html=True)
+        # Display degree-specific module selection guidelines
+        if degree in degree_info and year in degree_info[degree]:
+            st.subheader("Module Selection Guidelines")
+            if "core_modules" in degree_info[degree][year]:
+                st.write("**Core Modules:**")
+                for core_module in degree_info[degree][year]["core_modules"]:
+                    st.write(f"- {core_module}")
+            if "group_a" in degree_info[degree][year]:
+                st.write("**Group A:**")
+                st.write(degree_info[degree][year]["group_a"])
+            if "group_b" in degree_info[degree][year]:
+                st.write("**Group B:**")
+                st.write(degree_info[degree][year]["group_b"])
 
+        # Display modules available in the selected year
+        if year in modules_by_year:
+            st.subheader(f"Modules Available in {year}")
+            for module in modules_by_year[year]:
+                st.markdown(f"""
+                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                    <h3 style="margin-bottom: 10px;">{module}</h3>
+                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
+                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
+                </div>
+                """, unsafe_allow_html=True)
