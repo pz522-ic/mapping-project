@@ -509,9 +509,5 @@ with tab5:
 with tab6:
     st.header("More Info")
 
-    # Display commonly asked questions
-    st.subheader("Frequently Asked Questions")
-    for question, answer in faq.items():
-        with st.expander(question):
-            st.write(answer)
+
 
