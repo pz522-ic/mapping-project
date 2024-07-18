@@ -509,9 +509,3 @@ with tab6:
         with st.expander(question):
             st.write(answer)
 
-    # Chatbot interface
-    st.subheader("Ask a Question")
-    user_query = st.text_input("Type your question here:")
-    if user_query:
-        response = get_chatbot_response(user_query)
-        st.write("**Response:**", response)
