@@ -388,9 +388,9 @@ def draw_module_graph(modules_db):
 st.title("Module Management System")
 
 # Create tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Modules Wanted", "Module Information", "Module Relationships", "Assessment Information", "Degree Information"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
-with tab1:
+with tab2:
     st.header("Modules Wanted")
     # User selects desired modules
     desired_modules = st.multiselect("Select the modules you want to take:", options=list(modules_db.keys()))
@@ -411,7 +411,7 @@ with tab1:
     else:
         st.write("Select modules to see their prerequisites.")
 
-with tab2:
+with tab1:
     st.header("Module Information by Year")
     # Display modules by year
     for year, modules in modules_by_year.items():
