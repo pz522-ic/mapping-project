@@ -264,6 +264,12 @@ modules_by_year = {
         "Fluid Dynamics I (MATH60003)"
     ]
 }
+# Commonly asked questions and answers
+faq = {
+    "Can I switch to another programme?": "You can switch to any math programme (excluding JMC) during the first year and second year by filling in a form with the undergraduate office.",
+    "Can I drop an optional module halfway?": "You cannot drop an optional module halfway through the term. You must complete the module once you have started it.",
+    "How do I contact the undergraduate office?": "You can contact the undergraduate office via email at undergrad.math@university.edu or visit their office on the first floor of the math department building."
+}
 
 # Degree information
 degree_info = {
