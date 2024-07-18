@@ -446,7 +446,7 @@ with tab5:
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
 
     if degree and year:
-        st.header(f"{degree} - Year {year}")
+        st.header(f"{degree} - {year}")  # Corrected header format
 
         # Display degree-specific module selection guidelines
         if degree in degree_info and year in degree_info[degree]:
