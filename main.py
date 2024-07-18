@@ -1,10 +1,6 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
-import openai
-
-
-
 
 
 
@@ -264,12 +260,6 @@ modules_by_year = {
         "Fluid Dynamics I (MATH60003)"
     ]
 }
-# Commonly asked questions and answers
-faq = {
-    "Can I switch to another programme?": "You can switch to any math programme (excluding JMC) during the first year and second year by filling in a form with the undergraduate office.",
-    "Can I drop an optional module halfway?": "You cannot drop an optional module halfway through the term. You must complete the module once you have started it.",
-    "How do I contact the undergraduate office?": "You can contact the undergraduate office via email at undergrad.math@university.edu or visit their office on the first floor of the math department building."
-}
 
 # Degree information
 degree_info = {
@@ -394,31 +384,11 @@ def draw_module_graph(modules_db):
     plt.title("Module Prerequisite Graph")
     st.pyplot(plt)
 
-
-# Function to handle chatbot responses
-def get_chatbot_response(user_input):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=f"Q: {user_input}\nA:",
-        max_tokens=150,
-        n=1,
-        stop=["\n", "Q:"],
-        temperature=0.7,
-    )
-    return response.choices[0].text.strip()
-
-# Commonly asked questions and answers
-faq = {
-    "Can I switch to another programme?": "You can switch to any math programme (excluding JMC) during the first year and second year by filling in a form with the undergraduate office.",
-    "Can I drop an optional module halfway?": "You cannot drop an optional module halfway through the term. You must complete the module once you have started it.",
-    "How do I contact the undergraduate office?": "You can contact the undergraduate office via email at undergrad.math@university.edu or visit their office on the first floor of the math department building."
-}
-
 # Streamlit UI
 st.title("Module Management System")
 
 # Create tabs
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Module Information", "Modules Wanted", "Module Relationships", "Assessment Information", "Degree Information", "More Info"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
 with tab2:
     st.header("Modules Wanted")
@@ -506,8 +476,4 @@ with tab5:
                     <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
                 </div>
                 """, unsafe_allow_html=True)
-with tab6:
-    st.header("More Info")
-
-
 
