@@ -458,11 +458,26 @@ with tab1:
     else:
         st.write("No modules available for the selected term.")
 
-
+# Tab 3: Module Relationships
 with tab3:
     st.header("Module Relationships")
     st.write("The following graph shows the relationships and prerequisites between modules.")
-    draw_module_graph(modules_db)
+
+    # Dropdown for selecting completed modules
+    completed_modules = st.multiselect("Modules Taken", options=["None"] + list(modules_db.keys()), default="None")
+
+    # Dropdown for selecting desired modules
+    desired_modules = st.multiselect("Modules Wanted", options=["None"] + list(modules_db.keys()), default="None")
+
+    # Remove 'None' from the selections if present
+    if "None" in completed_modules:
+        completed_modules.remove("None")
+    if "None" in desired_modules:
+        desired_modules.remove("None")
+
+    # Draw the module graph based on the selected modules
+    draw_module_graph(modules_db, completed_modules, desired_modules)
+
 
 with tab4:
     st.header("Assessment Information")
