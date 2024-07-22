@@ -386,11 +386,12 @@ def get_prerequisites(modules, modules_db):
         prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
     return prerequisites
 
-# Function to draw a graph of module relationships
 def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
     G = nx.DiGraph()
     for module, details in modules_db.items():
+        G.add_node(module)
         for prereq in details["prerequisites"]:
+            G.add_node(prereq)
             G.add_edge(prereq, module)
 
     pos = nx.spring_layout(G)
@@ -398,9 +399,11 @@ def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
     nx.draw(G, pos, with_labels=True, node_size=3000, node_color='lightblue', font_size=10, font_weight='bold', edge_color='gray')
 
     if taken_modules:
-        nx.draw_networkx_nodes(G, pos, nodelist=taken_modules, node_color='green')
+        valid_taken_modules = [mod for mod in taken_modules if mod in G.nodes]
+        nx.draw_networkx_nodes(G, pos, nodelist=valid_taken_modules, node_color='green')
     if wanted_modules:
-        nx.draw_networkx_nodes(G, pos, nodelist=wanted_modules, node_color='red')
+        valid_wanted_modules = [mod for mod in wanted_modules if mod in G.nodes]
+        nx.draw_networkx_nodes(G, pos, nodelist=valid_wanted_modules, node_color='red')
 
     plt.title("Module Prerequisite Graph")
     st.pyplot(plt)
