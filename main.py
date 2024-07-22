@@ -354,6 +354,21 @@ degree_info = {
         }
     }
 }
+
+# Function to display module details
+def display_module_details(module_name):
+    module = modules_db[module_name]
+    st.markdown(f"""
+    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+        <h3 style="margin-bottom: 10px;">{module_name}</h3>
+        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(module['prerequisites']) if module['prerequisites'] else 'None'}</p>
+        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module['summary']}</p>
+        <p style="margin-bottom: 5px;"><strong>Term:</strong> {module['term']}</p>
+        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module['lecturer']}</p>
+        <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {', '.join(module['assessments'])}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
 # Function to find available modules based on completed ones
 def find_available_modules(completed_modules, modules_db):
     available_modules = []
@@ -411,21 +426,23 @@ with tab2:
     else:
         st.write("Select modules to see their prerequisites.")
 
+# Tab 1: Module Information by Term
 with tab1:
-    st.header("Module Information by Year")
-    # Display modules by year
-    for year, modules in modules_by_year.items():
-        with st.expander(year):
-            for module in modules:
-                st.markdown(f"""
-                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                    <h3 style="margin-bottom: 10px;">{module}</h3>
-                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                </div>
-                """, unsafe_allow_html=True)
+    st.header("Module Information by Term")
+    
+    # Dropdown menu for selecting term
+    selected_term = st.selectbox("Select Term", ["Autumn", "Spring", "Summer"])
+    
+    # Filter modules by selected term
+    filtered_modules = {name: details for name, details in modules_db.items() if selected_term in details["term"]}
+    
+    if not filtered_modules:
+        st.write(f"No modules available for the {selected_term} term.")
+    else:
+        # Display modules for the selected term
+        for module_name in filtered_modules:
+            if st.button(module_name):
+                display_module_details(module_name)
 
 with tab3:
     st.header("Module Relationships")
