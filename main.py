@@ -387,7 +387,7 @@ def get_prerequisites(modules, modules_db):
     return prerequisites
 
 # Function to draw a graph of module relationships
-def draw_module_graph(modules_db):
+def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
     G = nx.DiGraph()
     for module, details in modules_db.items():
         for prereq in details["prerequisites"]:
@@ -396,6 +396,12 @@ def draw_module_graph(modules_db):
     pos = nx.spring_layout(G)
     plt.figure(figsize=(10, 7))
     nx.draw(G, pos, with_labels=True, node_size=3000, node_color='lightblue', font_size=10, font_weight='bold', edge_color='gray')
+
+    if taken_modules:
+        nx.draw_networkx_nodes(G, pos, nodelist=taken_modules, node_color='green')
+    if wanted_modules:
+        nx.draw_networkx_nodes(G, pos, nodelist=wanted_modules, node_color='red')
+
     plt.title("Module Prerequisite Graph")
     st.pyplot(plt)
 
@@ -461,22 +467,25 @@ with tab1:
 # Tab 3: Module Relationships
 with tab3:
     st.header("Module Relationships")
-    st.write("The following graph shows the relationships and prerequisites between modules.")
 
-    # Dropdown for selecting completed modules
-    completed_modules = st.multiselect("Modules Taken", options=["None"] + list(modules_db.keys()), default="None")
+    # Dropdown for selecting modules taken
+    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
 
-    # Dropdown for selecting desired modules
-    desired_modules = st.multiselect("Modules Wanted", options=["None"] + list(modules_db.keys()), default="None")
+    # Dropdown for selecting modules wanted
+    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
 
-    # Remove 'None' from the selections if present
-    if "None" in completed_modules:
-        completed_modules.remove("None")
-    if "None" in desired_modules:
-        desired_modules.remove("None")
+    # Validate selections
+    if "None" in taken_modules and "None" in wanted_modules:
+        st.error("You cannot select 'None' for both modules taken and modules wanted.")
+    else:
+        # Remove "None" from selections
+        if "None" in taken_modules:
+            taken_modules.remove("None")
+        if "None" in wanted_modules:
+            wanted_modules.remove("None")
 
-    # Draw the module graph based on the selected modules
-    draw_module_graph(modules_db, completed_modules, desired_modules)
+        # Display the relationships
+        draw_module_graph(modules_db, taken_modules, wanted_modules)
 
 
 with tab4:
