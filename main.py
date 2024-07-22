@@ -428,21 +428,36 @@ with tab2:
 
 # Tab 1: Module Information by Term
 with tab1:
-    st.header("Module Information by Term")
-    
-    # Dropdown menu for selecting term
-    selected_term = st.selectbox("Select Term", ["Autumn", "Spring", "Summer"])
-    
-    # Filter modules by selected term
-    filtered_modules = {name: details for name, details in modules_db.items() if selected_term in details["term"]}
-    
-    if not filtered_modules:
-        st.write(f"No modules available for the {selected_term} term.")
+    st.header("Module Information by Year")
+
+    # Dropdown for selecting year
+    selected_year = st.selectbox("Select Year", options=list(modules_by_year.keys()))
+
+    # Get modules for the selected year
+    modules_for_year = modules_by_year[selected_year]
+
+    # Dropdown for selecting term
+    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
+
+    # Filter modules based on the selected term
+    filtered_modules = [module for module in modules_for_year if selected_term in modules_db[module]["term"]]
+
+    # Display modules for the selected term
+    if filtered_modules:
+        for module in filtered_modules:
+            module_details = modules_db[module]
+            st.markdown(f"""
+            <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                <h3 style="margin-bottom: 10px;">{module}</h3>
+                <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(module_details['prerequisites']) if module_details['prerequisites'] else 'None'}</p>
+                <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module_details['summary']}</p>
+                <p style="margin-bottom: 5px;"><strong>Term:</strong> {module_details['term']}</p>
+                <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module_details['lecturer']}</p>
+            </div>
+            """, unsafe_allow_html=True)
     else:
-        # Display modules for the selected term
-        for module_name in filtered_modules:
-            if st.button(module_name):
-                display_module_details(module_name)
+        st.write("No modules available for the selected term.")
+
 
 with tab3:
     st.header("Module Relationships")
