@@ -1,359 +1,89 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
+from pyvis.network import Network
 
-
-
-# Updated database of modules
+# Sample database of modules
 modules_db = {
-    "Introduction to University Math (MATH40001/40009)": {
+    "Analysis I": {
         "prerequisites": [],
-        "summary": "Introduction to university mathematics.",
-        "term": "Autumn",
-        "lecturer": "Marie Amalie Lawn, Eva-Marie Graefe, Charlotte Kestner",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Analysis I (MATH40002)": {
-        "prerequisites": [],
-        "summary": "Introduction to analysis.",
+        "summary": "Introduction to basic concepts in mathematics.",
         "term": "Autumn and Spring",
-        "lecturer": "Ajay Chandra (T1), Marco Guaraco (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Alice Smith",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Linear Algebra and Group Theory (MATH40003)": {
+    "Linear Algebra and Groups": {
         "prerequisites": [],
-        "summary": "Introduction to linear algebra and group theory.",
+        "summary": "Advanced topics in mathematics.",
         "term": "Autumn and Spring",
-        "lecturer": "Travis Schedler (T1), Michele Zordan (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Bob Jones",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Calculus and Applications (MATH40004)": {
+    "Introduction to University Math": {
         "prerequisites": [],
-        "summary": "Introduction to calculus and its applications.",
+        "summary": "Fundamentals of physics.",
+        "term": "Autumn",
+        "lecturer": "Dr. Carol White",
+        "assessments": ["Exam", "Coursework"]
+    },
+    "Linear Algebra adn Numerical Analysis": {
+        "prerequisites": ["Linear Algebra and Groups"],
+        "summary": "Continuation of Linear Algebra and Groups",
         "term": "Autumn and Spring",
-        "lecturer": "Demetrios Papageorgiou (T1), Vahid Shahrezaei (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Dan Brown",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Probability and Statistics (MATH40005)": {
+    "Analysis II": {
         "prerequisites": [],
-        "summary": "Introduction to probability and statistics.",
+        "summary": "Real Analysis and Complex Analysis",
         "term": "Autumn and Spring",
-        "lecturer": "Ioanna Papatsouma (T1), Dean Bodenham (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Eve Black",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Introduction to Computation (MATH40006)": {
-        "prerequisites": [],
-        "summary": "Introduction to computation.",
-        "term": "Autumn",
-        "lecturer": "Phil Ramsden",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "An Introduction to Applied Maths (MATH40007)": {
-        "prerequisites": [],
-        "summary": "Introduction to applied mathematics.",
-        "term": "Autumn",
-        "lecturer": "Darren Crowdy",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "M1R (MATH40008)": {
-        "prerequisites": [],
-        "summary": "Mathematics 1 Revision.",
-        "term": "To be confirmed",
-        "lecturer": "Michele Zordan",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Linear Algebra (JMC) (MATH40012)": {
-        "prerequisites": [],
-        "summary": "Linear Algebra for JMC students.",
+    "Linear Algebra and Numerical Analysis": {
+        "prerequisites": ["Linear Algebra and Groups"],
+        "summary": "Advanced topics in computer science.",
         "term": "Autumn and Spring",
-        "lecturer": "Benjamin Briggs (T1) Alexei Skorobogatov (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Frank Green",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Analysis 2: Real Analysis and Topology (MATH50001/50017)": {
-        "prerequisites": ["Analysis I"],
-        "summary": "Advanced real analysis and topology.",
-        "term": "Autumn",
-        "lecturer": "Davoud Cheraghi (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Analysis 2: Complex Analysis (MATH50001/50018)": {
-        "prerequisites": ["Analysis I"],
-        "summary": "Complex analysis.",
-        "term": "Spring",
-        "lecturer": "Nattalie Tamam (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "M2R (MATH50002/MATH50014)": {
+    "PDE in Action": {
         "prerequisites": [],
-        "summary": "Mathematics 2 Revision.",
-        "term": "Autumn and Spring",
-        "lecturer": "Thibault Bertrand",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Linear Algebra (MATH50003/50012)": {
-        "prerequisites": ["Linear Algebra and Group Theory"],
-        "summary": "Advanced linear algebra.",
-        "term": "Autumn",
-        "lecturer": "Martin Liebeck (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Numerical Analysis (MATH50003/50016)": {
-        "prerequisites": ["Linear Algebra and Group Theory"],
-        "summary": "Numerical methods for solving mathematical problems.",
+        "summary": "Study of algorithms.",
         "term": "Spring",
-        "lecturer": "Sheehan Olver (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Grace Miller",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Multivariable Calculus (MATH50004/50015)": {
-        "prerequisites": ["Calculus and Applications"],
-        "summary": "Multivariable calculus.",
-        "term": "Autumn",
-        "lecturer": "Andrew Walton (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Differential Equations (MATH50004/50019)": {
-        "prerequisites": ["Calculus and Applications"],
-        "summary": "Introduction to differential equations.",
+    "Groups and Rings": {
+        "prerequisites": ["Linear Algebra and Groups"],
+        "summary": "Study of data structures.",
         "term": "Spring",
-        "lecturer": "Martin Rasmussen (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
+        "lecturer": "Dr. Henry Wilson",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Groups and Rings (MATH50005)": {
-        "prerequisites": ["Linear Algebra and Group Theory"],
-        "summary": "Study of groups and rings.",
-        "term": "Autumn",
-        "lecturer": "Tom Coates (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Lebesgue Measure and Integration (MATH50006)": {
-        "prerequisites": ["Analysis I"],
-        "summary": "Lebesgue measure theory and integration.",
-        "term": "Spring",
-        "lecturer": "Pierre-Francois Rodriguez (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Network Science (MATH50007)": {
-        "prerequisites": [],
-        "summary": "Introduction to network science.",
-        "term": "Spring",
-        "lecturer": "Sarah Ferguson-Briggs (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "PDEs in Action (MATH50008)": {
-        "prerequisites": [],
-        "summary": "Partial differential equations in action.",
-        "term": "Spring",
-        "lecturer": "Thibault Bertrand (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Principles of Programming (MATH50009)": {
-        "prerequisites": [],
-        "summary": "Principles of programming.",
-        "term": "Autumn",
-        "lecturer": "David Ham (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Probability for Statistics (MATH50010)": {
-        "prerequisites": [],
-        "summary": "Probability theory for statistics.",
-        "term": "Autumn",
-        "lecturer": "Ciara Pike-Burke (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Statistical Modelling 1 (MATH50011)": {
-        "prerequisites": [],
-        "summary": "Introduction to statistical modelling.",
-        "term": "Spring",
-        "lecturer": "Riccardo Passeggeri (T2)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Probability (JMC) (MATH50013)": {
-        "prerequisites": [],
-        "summary": "Probability for JMC students.",
-        "term": "Autumn",
-        "lecturer": "Tomasz Kosmala (T1)",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Compulsory"
-    },
-    "Machine Learning (MATH60001)": {
-        "prerequisites": ["Multivariable Calculus", "Linear Algebra and Group Theory"],
+    "Algebra III": {
+        "prerequisites": ["Mathematics II", "Algorithms"],
         "summary": "Introduction to machine learning.",
         "term": "Autumn",
-        "lecturer": "Irene Davis",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "lecturer": "Dr. Irene Davis",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Galois Theory (MATH60002)": {
-        "prerequisites": ["Groups and Rings"],
-        "summary": "Advanced Galois theory.",
+    "Galois Theory": {
+        "prerequisites": ["Data Structures"],
+        "summary": "Study of artificial intelligence.",
         "term": "Spring",
-        "lecturer": "Jack Clark",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
+        "lecturer": "Dr. Jack Clark",
+        "assessments": ["Exam", "Coursework"]
     },
-    "Fluid Dynamics I (MATH60003)": {
-        "prerequisites": ["Differential Equations"],
-        "summary": "Introduction to fluid dynamics.",
+    "Fluid Dynamics I": {
+        "prerequisites": ["Computer Science I"],
+        "summary": "Introduction to Fluid Dynamics",
         "term": "Autumn",
-        "lecturer": "Karen Martinez",
-        "assessments": ["Exam", "Coursework"],
-        "type": "Optional"
-    }
+        "lecturer": "Dr. Karen Martinez",
+        "assessments": ["Exam", "Coursework"]
+    },
 }
 
-# Organize modules by year
-modules_by_year = {
-    "Year 1": [
-        "Introduction to University Math (MATH40001/40009)",
-        "Analysis I (MATH40002)",
-        "Linear Algebra and Group Theory (MATH40003)",
-        "Calculus and Applications (MATH40004)",
-        "Probability and Statistics (MATH40005)",
-        "Introduction to Computation (MATH40006)",
-        "An Introduction to Applied Maths (MATH40007)",
-        "M1R (MATH40008)",
-        "Linear Algebra (JMC) (MATH40012)"
-    ],
-    "Year 2": [
-        "Analysis 2: Real Analysis and Topology (MATH50001/50017)",
-        "Analysis 2: Complex Analysis (MATH50001/50018)",
-        "M2R (MATH50002/MATH50014)",
-        "Linear Algebra (MATH50003/50012)",
-        "Numerical Analysis (MATH50003/50016)",
-        "Multivariable Calculus (MATH50004/50015)",
-        "Differential Equations (MATH50004/50019)",
-        "Groups and Rings (MATH50005)",
-        "Lebesgue Measure and Integration (MATH50006)",
-        "Network Science (MATH50007)",
-        "PDEs in Action (MATH50008)",
-        "Principles of Programming (MATH50009)",
-        "Probability for Statistics (MATH50010)",
-        "Statistical Modelling 1 (MATH50011)",
-        "Probability (JMC) (MATH50013)"
-    ],
-    "Year 3": [
-        "Machine Learning (MATH60001)",
-        "Galois Theory (MATH60002)",
-        "Fluid Dynamics I (MATH60003)"
-    ]
-}
-
-# Degree information
-degree_info = {
-    "G100": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    },
-    "G102": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Network Science", "Principles of Programming"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G125": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G1F3": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Partial Differential Equations in Action"],
-            "group_b": "Choose 3 modules from Group B"
-        }
-    },
-    "G1G3": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G1GH": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "GG31": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G103": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    },
-    "G104": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A (language module if required)",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    }
-}
 # Function to find available modules based on completed ones
 def find_available_modules(completed_modules, modules_db):
     available_modules = []
@@ -371,27 +101,62 @@ def get_prerequisites(modules, modules_db):
         prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
     return prerequisites
 
-# Function to draw a graph of module relationships
-def draw_module_graph(modules_db):
+# Function to draw the module graph
+def draw_module_graph(modules_db, completed_modules=[], desired_modules=[]):
     G = nx.DiGraph()
     for module, details in modules_db.items():
         for prereq in details["prerequisites"]:
             G.add_edge(prereq, module)
 
-    pos = nx.spring_layout(G)
-    plt.figure(figsize=(10, 7))
-    nx.draw(G, pos, with_labels=True, node_size=3000, node_color='lightblue', font_size=10, font_weight='bold', edge_color='gray')
-    plt.title("Module Prerequisite Graph")
-    st.pyplot(plt)
+    # Use Pyvis for interactive network visualization
+    net = Network(height='750px', width='100%', bgcolor='#222222', font_color='white')
+    for node in G.nodes:
+        color = 'green' if node in completed_modules else 'red' if node in desired_modules else 'blue'
+        net.add_node(node, label=node, color=color)
+    for edge in G.edges:
+        net.add_edge(edge[0], edge[1])
+    
+    net.show('module_graph.html')
+    st.components.v1.html(open('module_graph.html', 'r').read(), height=750)
 
 # Streamlit UI
 st.title("Module Management System")
 
 # Create tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
+tab1, tab2, tab3, tab4 = st.tabs(["Module Information", "Module Relationships", "Modules Wanted", "Assessment Information"])
 
+# Tab 1: Module Information
+with tab1:
+    st.header("Module Information by Term")
+    term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
+    
+    for module, details in modules_db.items():
+        if term in details["term"]:
+            st.markdown(f"""
+            <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                <h3 style="margin-bottom: 10px;">{module}</h3>
+                <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(details['prerequisites']) if details['prerequisites'] else 'None'}</p>
+                <p style="margin-bottom: 5px;"><strong>Summary:</strong> {details['summary']}</p>
+                <p style="margin-bottom: 5px;"><strong>Term:</strong> {details['term']}</p>
+                <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {details['lecturer']}</p>
+                <a href="/{module.replace(' ', '_')}"><button>Go to Module Page</button></a>
+            </div>
+            """, unsafe_allow_html=True)
+
+# Tab 2: Module Relationships
 with tab2:
+    st.header("Module Relationships")
+    
+    completed_modules = st.multiselect("Select completed modules:", options=list(modules_db.keys()))
+    desired_modules = st.multiselect("Select desired modules:", options=list(modules_db.keys()))
+    
+    st.write("The following graph shows the relationships and prerequisites between modules.")
+    draw_module_graph(modules_db, completed_modules, desired_modules)
+
+# Tab 3: Modules Wanted
+with tab3:
     st.header("Modules Wanted")
+    
     # User selects desired modules
     desired_modules = st.multiselect("Select the modules you want to take:", options=list(modules_db.keys()))
 
@@ -411,69 +176,16 @@ with tab2:
     else:
         st.write("Select modules to see their prerequisites.")
 
-with tab1:
-    st.header("Module Information by Year")
-    # Display modules by year
-    for year, modules in modules_by_year.items():
-        with st.expander(year):
-            for module in modules:
-                st.markdown(f"""
-                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                    <h3 style="margin-bottom: 10px;">{module}</h3>
-                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-with tab3:
-    st.header("Module Relationships")
-    st.write("The following graph shows the relationships and prerequisites between modules.")
-    draw_module_graph(modules_db)
-
+# Tab 4: Assessment Information
 with tab4:
     st.header("Assessment Information")
-    st.write("Detailed assessment information will be added here.")
-
-with tab5:
-    st.header("Degree Information")
-
-    # Dropdown for degree selection
-    degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
-
-    # Dropdown for year selection
-    year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
-
-    if degree and year:
-        st.header(f"{degree} - {year}")  # Corrected header format
-
-        # Display degree-specific module selection guidelines
-        if degree in degree_info and year in degree_info[degree]:
-            st.subheader("Module Selection Guidelines")
-            if "core_modules" in degree_info[degree][year]:
-                st.write("**Core Modules:**")
-                for core_module in degree_info[degree][year]["core_modules"]:
-                    st.write(f"- {core_module}")
-            if "group_a" in degree_info[degree][year]:
-                st.write("**Group A:**")
-                st.write(degree_info[degree][year]["group_a"])
-            if "group_b" in degree_info[degree][year]:
-                st.write("**Group B:**")
-                st.write(degree_info[degree][year]["group_b"])
-
-        # Display modules available in the selected year
-        if year in modules_by_year:
-            st.subheader(f"Modules Available in {year}")
-            for module in modules_by_year[year]:
-                st.markdown(f"""
-                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                    <h3 style="margin-bottom: 10px;">{module}</h3>
-                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-
+    
+    # Display assessment information for each module
+    for module, details in modules_db.items():
+        assessments = details.get("assessments", [])
+        st.markdown(f"""
+        <div style="border: 2px solid #FFD700; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+            <h3 style="margin-bottom: 10px;">{module}</h3>
+            <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {', '.join(assessments) if assessments else 'None'}</p>
+        </div>
+        """, unsafe_allow_html=True)
