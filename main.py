@@ -84,6 +84,14 @@ modules_db = {
     },
 }
 
+# Organize modules by term
+modules_by_term = {
+    "Autumn": [module for module, details in modules_db.items() if "Autumn" in details["term"]],
+    "Spring": [module for module, details in modules_db.items() if "Spring" in details["term"]],
+    "Summer": [module for module, details in modules_db.items() if "Summer" in details["term"]],
+}
+
+
 # Function to find available modules based on completed ones
 def find_available_modules(completed_modules, modules_db):
     available_modules = []
@@ -101,23 +109,19 @@ def get_prerequisites(modules, modules_db):
         prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
     return prerequisites
 
-# Function to draw the module graph
-def draw_module_graph(modules_db, completed_modules=[], desired_modules=[]):
+#draw interactive module relationship
+def draw_interactive_module_graph(modules_db, completed_modules=[], desired_modules=[]):
     G = nx.DiGraph()
     for module, details in modules_db.items():
         for prereq in details["prerequisites"]:
             G.add_edge(prereq, module)
 
-    # Use Pyvis for interactive network visualization
-    net = Network(height='750px', width='100%', bgcolor='#222222', font_color='white')
-    for node in G.nodes:
-        color = 'green' if node in completed_modules else 'red' if node in desired_modules else 'blue'
-        net.add_node(node, label=node, color=color)
-    for edge in G.edges:
-        net.add_edge(edge[0], edge[1])
-    
-    net.show('module_graph.html')
-    st.components.v1.html(open('module_graph.html', 'r').read(), height=750)
+    net = Network(notebook=True, height="750px", width="100%", directed=True)
+    net.from_nx(G)
+    net.show("module_graph.html")
+    with open("module_graph.html", "r") as f:
+        st.components.v1.html(f.read(), height=750, width="100%")
+
 
 # Streamlit UI
 st.title("Module Management System")
@@ -128,30 +132,31 @@ tab1, tab2, tab3, tab4 = st.tabs(["Module Information", "Module Relationships", 
 # Tab 1: Module Information
 with tab1:
     st.header("Module Information by Term")
-    term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
-    
-    for module, details in modules_db.items():
-        if term in details["term"]:
-            st.markdown(f"""
-            <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                <h3 style="margin-bottom: 10px;">{module}</h3>
-                <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(details['prerequisites']) if details['prerequisites'] else 'None'}</p>
-                <p style="margin-bottom: 5px;"><strong>Summary:</strong> {details['summary']}</p>
-                <p style="margin-bottom: 5px;"><strong>Term:</strong> {details['term']}</p>
-                <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {details['lecturer']}</p>
-                <a href="/{module.replace(' ', '_')}"><button>Go to Module Page</button></a>
-            </div>
-            """, unsafe_allow_html=True)
+    selected_term = st.selectbox("Select Term:", options=["Autumn", "Spring", "Summer"])
+    if selected_term in modules_by_term:
+        modules = modules_by_term[selected_term]
+        for module in modules:
+            if st.button(f"View {module}"):
+                module_details = modules_db[module]
+                st.markdown(f"""
+                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+                    <h3 style="margin-bottom: 10px;">{module}</h3>
+                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(module_details['prerequisites']) if module_details['prerequisites'] else 'None'}</p>
+                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module_details['summary']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {module_details['term']}</p>
+                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module_details['lecturer']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
-# Tab 2: Module Relationships
+#module relationships
 with tab2:
     st.header("Module Relationships")
-    
-    completed_modules = st.multiselect("Select completed modules:", options=list(modules_db.keys()))
-    desired_modules = st.multiselect("Select desired modules:", options=list(modules_db.keys()))
-    
-    st.write("The following graph shows the relationships and prerequisites between modules.")
-    draw_module_graph(modules_db, completed_modules, desired_modules)
+    st.write("Select the modules you have taken and the modules you want to take to see the module relationships.")
+    completed_modules = st.multiselect("Select modules you have taken:", options=list(modules_db.keys()), default=[])
+    desired_modules = st.multiselect("Select modules you want to take:", options=list(modules_db.keys()), default=[])
+    if st.button("Show Module Relationships"):
+        draw_interactive_module_graph(modules_db, completed_modules, desired_modules)
+
 
 # Tab 3: Modules Wanted
 with tab3:
