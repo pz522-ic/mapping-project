@@ -477,7 +477,7 @@ with tab5:
     st.header("Degree Information")
 
     # Dropdown for degree selection
-    degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
+    degree = st.selectbox("Select Degree", ["G100 MATHEMATICS (BSc)", "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION", "G103 MATHEMATICS (MSci)", "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)", "G125 MATHEMATICS (PURE MATHEMATICS)", "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS", "G1G3 MATHEMATICS WITH STATISTICS", "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE", "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS"])
 
     # Dropdown for year selection
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
