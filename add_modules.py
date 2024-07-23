@@ -1,3 +1,6 @@
+from db_setup import session 
+from class import Module  
+
 def add_module(session, name, code, prerequisites, recommended_prerequisites, term, lecturer, assessments):
     # Convert list fields to strings
     prerequisites_str = ', '.join(prerequisites) if prerequisites else ""
@@ -28,3 +31,4 @@ add_module(
     lecturer="Sara Veneziale",
     assessments=["Exam: 80%", "Coursework: 20%"]
 )
+
