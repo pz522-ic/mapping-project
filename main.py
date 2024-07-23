@@ -263,7 +263,7 @@ modules_by_year = {
 
 # Degree information
 degree_info = {
-    "G100": {
+    "G100 MATHEMATICS (BSc)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -273,7 +273,7 @@ degree_info = {
             "group_b": "Choose 4 modules from Group B"
         }
     },
-    "G102": {
+    "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -283,7 +283,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G125": {
+    "G125 MATHEMATICS (PURE MATHEMATICS)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -293,7 +293,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G1F3": {
+    "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -303,7 +303,7 @@ degree_info = {
             "group_b": "Choose 3 modules from Group B"
         }
     },
-    "G1G3": {
+    "G1G3 MATHEMATICS WITH STATISTICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -313,7 +313,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G1GH": {
+    "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -323,7 +323,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "GG31": {
+    "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -333,7 +333,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G103": {
+    "G103 MATHEMATICS (MSci)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -343,7 +343,7 @@ degree_info = {
             "group_b": "Choose 4 modules from Group B"
         }
     },
-    "G104": {
+    "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
