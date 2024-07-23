@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 
-# Association table for many-to-many relationship
+# Association table 
 module_keywords = Table('module_keywords', Base.metadata,
     Column('module_id', Integer, ForeignKey('modules.id'), primary_key=True),
     Column('keyword_id', Integer, ForeignKey('keywords.id'), primary_key=True)
@@ -30,7 +30,7 @@ class Keyword(Base):
     keyword = Column(String, unique=True, nullable=False)
     modules = relationship('Module', secondary=module_keywords, back_populates='keywords')
 
-# database engine and session
+# database engine & session
 engine = create_engine('sqlite:///modules.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
