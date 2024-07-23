@@ -1,5 +1,5 @@
 from db_setup import session 
-from class import Module  
+from module_class import Module  
 
 def add_module(session, name, code, prerequisites, recommended_prerequisites, term, lecturer, assessments):
     # Convert list fields to strings
