@@ -261,75 +261,100 @@ modules_by_year = {
     ]
 }
 
-import streamlit as st
-
 # Degree information
 degree_info = {
     "G100 MATHEMATICS (BSc)": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A and 4 modules from Group B."
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
         }
     },
     "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The modules Network Science and Principles of Programming are considered core for this Degree coding and must be taken. Select 2 further modules from Group B."
+            "core_modules": ["Network Science", "Principles of Programming"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G125 MATHEMATICS (PURE MATHEMATICS)": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The modules Groups and Rings and Lebesgue Measure and Integration are considered core for this Degree coding and must be taken. Select 2 further modules from Group B."
+            "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The module Partial Differential Equations in Action is considered core for this Degree coding and must be taken. Select 3 further modules from Group B."
+            "core_modules": ["Partial Differential Equations in Action"],
+            "group_b": "Choose 3 modules from Group B"
         }
     },
     "G1G3 MATHEMATICS WITH STATISTICS": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B."
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B."
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B."
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
         }
     },
     "G103 MATHEMATICS (MSci)": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A and 4 modules from Group B."
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
         }
     },
     "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)": {
-        "year1": "All modules in Year 1 are core and compulsory.",
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
         "year2": {
-            "requirements": "Select one module from Group A (if you are required to take a language module, this must be taken as your Group A module and will be considered core. It will have zero weighting and be worth 7.5 ECTS) and 4 modules from Group B."
+            "group_a": "Choose one module from Group A (language module if required)",
+            "group_b": "Choose 4 modules from Group B"
         }
     }
 }
 
-# Modules available by year
-modules_by_year = {
-    "Year 1": [
-        "Mathematical Analysis I", "Linear Algebra I", "Calculus and Applications", "Introduction to Computing"
-    ],
-    "Year 2": [
-        "Groups and Rings", "Lebesgue Measure and Integration", "Probability for Statistics", "Statistical Modelling", "Network Science", "Partial Differential Equations in Action", "Principles of Programming"
-    ]
-}
 # Function to display module details
 def display_module_details(module_name):
     module = modules_db[module_name]
@@ -447,47 +472,37 @@ with tab1:
 with tab4:
     st.header("Assessment Information")
     st.write("Detailed assessment information will be added here.")
+
 with tab5:
     st.header("Degree Information")
 
     # Dropdown for degree selection
-    degree = st.selectbox("Select Degree", list(degree_info.keys()))
+    degree = st.selectbox("Select Degree", ["G100 MATHEMATICS (BSc)", "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION", "G103 MATHEMATICS (MSci)", "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)", "G125 MATHEMATICS (PURE MATHEMATICS)", "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS", "G1G3 MATHEMATICS WITH STATISTICS", "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE", "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS"])
 
     # Dropdown for year selection
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
 
     if degree and year:
-        st.header(f"{degree} - {year}")
+        st.header(f"{degree} - {year}")  # Corrected header format
 
-        if year == "Year 1":
-            # Display message for Year 1
-            st.write(degree_info[degree]["year1"])
-            # Display all Year 1 modules
-            st.subheader("Modules Available in Year 1")
-            for module in modules_by_year["Year 1"]:
-                st.write(f"- {module}")
-        elif year == "Year 2":
-            # Display Group A and Group B information
-            st.subheader("Group A:")
-            st.write("i-Explore")
-            st.subheader("Group B:")
-            st.write("""
-            Groups and Rings\n
-            Lebesgue Measure and Integration\n
-            Probability for Statistics\n
-            Statistical Modelling\n
-            Network Science\n
-            Partial Differential Equations in Action\n
-            Principles of Programming
-            """)
+        # Display degree-specific module selection guidelines
+        if degree in degree_info and year in degree_info[degree]:
+            st.subheader("Module Selection Guidelines")
+            if "core_modules" in degree_info[degree][year]:
+                st.write("**Core Modules:**")
+                for core_module in degree_info[degree][year]["core_modules"]:
+                    st.write(f"- {core_module}")
+            if "group_a" in degree_info[degree][year]:
+                st.write("**Group A:**")
+                st.write(degree_info[degree][year]["group_a"])
+            if "group_b" in degree_info[degree][year]:
+                st.write("**Group B:**")
+                st.write(degree_info[degree][year]["group_b"])
 
-            # Display requirements for the selected degree
-            st.subheader("Degree-specific Requirements")
-            st.write(degree_info[degree]["year2"]["requirements"])
-
-            # Display all Year 2 modules
-            st.subheader("Modules Available in Year 2")
-            for module in modules_by_year["Year 2"]:
+        # Display modules available in the selected year
+        if year in modules_by_year:
+            st.subheader(f"Modules Available in {year}")
+            for module in modules_by_year[year]:
                 st.markdown(f"""
                 <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
                     <h3 style="margin-bottom: 10px;">{module}</h3>
@@ -498,8 +513,6 @@ with tab5:
                     <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
                 </div>
                 """, unsafe_allow_html=True)
-        else:
-            st.write("Degree information for Year 3 and Year 4 is not available yet.")
 
 # Tab 3: Module Relationships
 with tab3:
