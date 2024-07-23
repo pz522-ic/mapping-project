@@ -467,28 +467,6 @@ with tab1:
     else:
         st.write("No modules available for the selected term.")
 
-# Tab 3: Module Relationships
-with tab3:
-    st.header("Module Relationships")
-
-    # Dropdown for selecting modules taken
-    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
-
-    # Dropdown for selecting modules wanted
-    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
-
-    # Validate selections
-    if "None" in taken_modules and "None" in wanted_modules:
-        st.error("You cannot select 'None' for both modules taken and modules wanted.")
-    else:
-        # Remove "None" from selections
-        if "None" in taken_modules:
-            taken_modules.remove("None")
-        if "None" in wanted_modules:
-            wanted_modules.remove("None")
-
-        # Display the relationships
-        draw_module_graph(modules_db, taken_modules, wanted_modules)
 
 
 with tab4:
@@ -536,3 +514,25 @@ with tab5:
                 </div>
                 """, unsafe_allow_html=True)
 
+# Tab 3: Module Relationships
+with tab3:
+    st.header("Module Relationships")
+
+    # Dropdown for selecting modules taken
+    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
+
+    # Dropdown for selecting modules wanted
+    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
+
+    # Validate selections
+    if "None" in taken_modules and "None" in wanted_modules:
+        st.error("You cannot select 'None' for both modules taken and modules wanted.")
+    else:
+        # Remove "None" from selections
+        if "None" in taken_modules:
+            taken_modules.remove("None")
+        if "None" in wanted_modules:
+            wanted_modules.remove("None")
+
+        # Display the relationships
+        draw_module_graph(modules_db, taken_modules, wanted_modules)
