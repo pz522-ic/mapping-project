@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-# Updated database of modules
+# database of modules
 modules_db = {
     "Introduction to University Math (MATH40001/40009)": {
         "prerequisites": [],
@@ -411,7 +411,7 @@ def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
 # Streamlit UI
 st.title("Module Management System")
 
-# Create tabs
+# tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
 with tab2:
