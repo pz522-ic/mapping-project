@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-# Updated database of modules
+# database of modules
 modules_db = {
     "Introduction to University Math (MATH40001/40009)": {
         "prerequisites": [],
@@ -263,7 +263,7 @@ modules_by_year = {
 
 # Degree information
 degree_info = {
-    "G100": {
+    "G100 MATHEMATICS (BSc)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -273,7 +273,7 @@ degree_info = {
             "group_b": "Choose 4 modules from Group B"
         }
     },
-    "G102": {
+    "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -283,7 +283,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G125": {
+    "G125 MATHEMATICS (PURE MATHEMATICS)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -293,7 +293,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G1F3": {
+    "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -303,7 +303,7 @@ degree_info = {
             "group_b": "Choose 3 modules from Group B"
         }
     },
-    "G1G3": {
+    "G1G3 MATHEMATICS WITH STATISTICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -313,7 +313,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G1GH": {
+    "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -323,7 +323,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "GG31": {
+    "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -333,7 +333,7 @@ degree_info = {
             "group_b": "Choose 2 modules from Group B"
         }
     },
-    "G103": {
+    "G103 MATHEMATICS (MSci)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -343,7 +343,7 @@ degree_info = {
             "group_b": "Choose 4 modules from Group B"
         }
     },
-    "G104": {
+    "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)": {
         "year1": {
             "group_a": "Choose one module from Group A",
             "group_b": "Choose 4 modules from Group B"
@@ -411,7 +411,7 @@ def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
 # Streamlit UI
 st.title("Module Management System")
 
-# Create tabs
+# tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
 with tab2:
@@ -467,28 +467,6 @@ with tab1:
     else:
         st.write("No modules available for the selected term.")
 
-# Tab 3: Module Relationships
-with tab3:
-    st.header("Module Relationships")
-
-    # Dropdown for selecting modules taken
-    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
-
-    # Dropdown for selecting modules wanted
-    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
-
-    # Validate selections
-    if "None" in taken_modules and "None" in wanted_modules:
-        st.error("You cannot select 'None' for both modules taken and modules wanted.")
-    else:
-        # Remove "None" from selections
-        if "None" in taken_modules:
-            taken_modules.remove("None")
-        if "None" in wanted_modules:
-            wanted_modules.remove("None")
-
-        # Display the relationships
-        draw_module_graph(modules_db, taken_modules, wanted_modules)
 
 
 with tab4:
@@ -499,7 +477,7 @@ with tab5:
     st.header("Degree Information")
 
     # Dropdown for degree selection
-    degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
+    degree = st.selectbox("Select Degree", ["G100 MATHEMATICS (BSc)", "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION", "G103 MATHEMATICS (MSci)", "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)", "G125 MATHEMATICS (PURE MATHEMATICS)", "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS", "G1G3 MATHEMATICS WITH STATISTICS", "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE", "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS"])
 
     # Dropdown for year selection
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
@@ -536,3 +514,25 @@ with tab5:
                 </div>
                 """, unsafe_allow_html=True)
 
+# Tab 3: Module Relationships
+with tab3:
+    st.header("Module Relationships")
+
+    # Dropdown for selecting modules taken
+    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
+
+    # Dropdown for selecting modules wanted
+    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
+
+    # Validate selections
+    if "None" in taken_modules and "None" in wanted_modules:
+        st.error("You cannot select 'None' for both modules taken and modules wanted.")
+    else:
+        # Remove "None" from selections
+        if "None" in taken_modules:
+            taken_modules.remove("None")
+        if "None" in wanted_modules:
+            wanted_modules.remove("None")
+
+        # Display the relationships
+        draw_module_graph(modules_db, taken_modules, wanted_modules)
