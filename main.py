@@ -10,6 +10,11 @@ engine = create_engine('sqlite:///modules.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
+# Initialize session state
+if "selected_module" not in st.session_state:
+    st.session_state.selected_module = None
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "Module Information"
 
 # Organize modules by year
 modules_by_year = {
@@ -34,6 +39,7 @@ modules_by_year = {
         "Principles of Programming",
         "Probability for Statistics",
         "Statistical Modelling 1",
+        "i-Explore"
     ],
     "Year 3": [
         "Fluid Dynamics 2",
@@ -55,18 +61,15 @@ modules_by_year = {
 degree_info = {
     "G100": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         }
     },
     "G102": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Network Science", "Principles of Programming"],
@@ -75,8 +78,7 @@ degree_info = {
     },
     "G125": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
@@ -85,8 +87,7 @@ degree_info = {
     },
     "G1F3": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Partial Differential Equations in Action"],
@@ -95,8 +96,7 @@ degree_info = {
     },
     "G1G3": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
@@ -105,8 +105,7 @@ degree_info = {
     },
     "G1GH": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
@@ -115,8 +114,7 @@ degree_info = {
     },
     "GG31": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
@@ -125,8 +123,7 @@ degree_info = {
     },
     "G103": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+           "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "group_a": "Choose one module from Group A",
@@ -135,13 +132,25 @@ degree_info = {
     },
     "G104": {
         "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
+            "core_modules": ["Analysis I", "Linear Algebra  and Group Theory","Probability and Statistics","Calculus and Applications","An Introduction to Applied Maths","M1R Research Project"]
         },
         "year2": {
             "group_a": "Choose one module from Group A (language module if required)",
             "group_b": "Choose 4 modules from Group B"
         }
+    },
+    #Year 2 Module Groups
+    "group_a":{
+        "i-Explore"
+    },
+    "group_b":{
+        "Groups and Rings",
+        "Lebesgue Measure and Integration",
+        "Network Science",
+        "PDEs in Action",
+        "Principles of Programming",
+        "Probability for Statistics",
+        "Statistical Modelling 1"
     }
 }
 
@@ -152,27 +161,34 @@ def get_modules():
 def get_module_by_name(name):
     return session.query(Module).filter_by(name=name).first()
 
+
+# session state for selected module
+if "selected_module" not in st.session_state:
+    st.session_state.selected_module = None
+
+#For tab 2 navigate to tab 1
+def navigate_to_module(module_name):
+    st.session_state.selected_module = module_name
+    st.experimental_rerun()
+
+
 def display_module_details(module_name):
     module = get_module_by_name(module_name)
     if module:
-        # Set default values if fields are empty
-        summary = module.summary if module.summary else "No summary available."
-        keywords = module.keywords if module.keywords else "No keywords available."
-        
         st.markdown(f"""
         <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
             <h3 style="margin-bottom: 10px;">{module.name}</h3>
+            <p style="margin-bottom: 5px;"><strong>Code:</strong> {module.code}</p>
             <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {module.prerequisites if module.prerequisites else 'None'}</p>
-            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {summary}</p>
-            <p style="margin-bottom: 5px;"><strong>Keywords:</strong> {keywords}</p>
-            <p style="margin-bottom: 5px;"><strong>Term:</strong> {module.term}</p>
-            <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module.lecturer}</p>
-            <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {module.assessments}</p>
+            <p style="margin-bottom: 5px;"><strong>Recommended Prerequisites:</strong> {module.recommended_prerequisites if module.recommended_prerequisites else 'None'}</p>
+            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module.summary if module.summary else 'No summary provided'}</p>
+            <p style="margin-bottom: 5px;"><strong>Term:</strong> {module.term if module.term else 'Not specified'}</p>
+            <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module.lecturer if module.lecturer else 'Not specified'}</p>
+            <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {module.assessments if module.assessments else 'No assessment details available'}</p>
+            <p style="margin-bottom: 5px;"><strong>Learning Outcomes:</strong> {module.learning_outcome if module.learning_outcome else 'No learning outcomes specified'}</p>
         </div>
         """, unsafe_allow_html=True)
     else:
-        st.write("Module not found.")
-
         st.write("Module not found.")
 
 def get_prerequisites(modules):
@@ -214,6 +230,10 @@ st.title("Module Management System")
 # Create tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
+
+
+
+
 with tab2:
     st.header("Modules Wanted")
     # User selects desired modules
@@ -244,30 +264,28 @@ with tab1:
     # Get modules for the selected year
     modules_for_year = modules_by_year[selected_year]
 
-    # Dropdown for selecting term with an "All" option
-    selected_term = st.selectbox("Select Term", options=["All", "Autumn", "Spring", "Summer"])
+    # Dropdown for selecting term
+    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
 
-    if selected_term == "All":
-        filtered_modules = modules_for_year
-    else:
-        # Filter modules based on the selected term
-        filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
+    # Filter modules based on the selected term
+    filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
 
-    # Display modules for the selected term or all modules
+    # Display modules for the selected term
     if filtered_modules:
         for module in filtered_modules:
-            display_module_details(module)
+            module_name = module  # Get the module name
+            with st.expander(module_name):
+                display_module_details(module_name)
     else:
-        st.write("No modules available for the selected term or year.")
-
+        st.write("No modules available for the selected term.")
 
 with tab3:
     st.header("Module Relationships")
 
-    # Dropdown for selecting modules taken
+    # Dropdown for modules taken
     taken_modules = st.multiselect("Select Modules Taken", options=["None"] + [module.name for module in get_modules()])
 
-    # Dropdown for selecting modules wanted
+    # Dropdown for modules wanted
     wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + [module.name for module in get_modules()])
 
     # Validate selections
@@ -287,11 +305,123 @@ with tab4:
     st.header("Assessment Information")
     st.write("Detailed assessment information will be added here.")
 
+
+#for tab 5
+#mapping of degree codes to full descriptions
+degree_descriptions = {
+    "G100": "G100 MATHEMATICS (BSc)",
+    "G102": "G102 MATHEMATICS WITH MATHEMATICAL COMPUTATION",
+    "G103": "G103 MATHEMATICS (MSci)",
+    "G104": "G104 MATHEMATICS WITH A YEAR ABROAD (MSci)",
+    "G125": "G125 MATHEMATICS (PURE MATHEMATICS)",
+    "G1F3": "G1F3 MATHEMATICS WITH APPLIED MATHEMATICS/MATHEMATICAL PHYSICS",
+    "G1G3": "G1G3 MATHEMATICS WITH STATISTICS",
+    "G1GH": "G1GH MATHEMATICS WITH STATISTICS FOR FINANCE",
+    "GG31": "GG31 MATHEMATICS, OPTIMISATION AND STATISTICS"
+}
+
+
+
+# Reverse the dictionary to get code from description
+description_to_code = {v: k for k, v in degree_descriptions.items()}
+
+# Define the degree-specific guide sentences
+degree_guides = {
+    "G100": "Select one module from Group A and 4 modules from Group B.",
+    "G102": "Select one module from Group A. The modules Network Science and Principles of Programming are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.",
+    "G125": "Select one module from Group A. The modules Groups and Rings and Lebesgue Measure and Integration are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.",
+    "G1F3": "Select one module from Group A. The module Partial Differential Equations in Action is considered core for this Degree coding and must be taken. Select 3 further modules from Group B.",
+    "G1G3": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.",
+    "G1GH": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.",
+    "GG31": "Select one module from Group A. The modules Probability for Statistics and Statistical Modelling I are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.",
+    "G103": "Select one module from Group A and 4 modules from Group B.",
+    "G104": "Select one module from Group A (if you are required to take a language module, this must be taken as your Group A module and will be considered core. It will have zero weighting and be worth 7.5 ECTS) and 4 modules from Group B."
+}
+
+
+
+
+
+# Reverse dictionary to get code from description
+description_to_code = {v: k for k, v in degree_descriptions.items()}
+
+# Define module information for each degree and year
+degree_info = {
+    "G100": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": "Select one module from Group A and 4 modules from Group B."
+        }
+    },
+    "G102": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": ("Select one module from Group A. The modules Network Science and Principles of Programming are considered core for this Degree coding and must be taken. Select 2 further modules from Group B.")
+        }
+    },
+    "G103": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G103"]
+        }
+    },
+    "G104": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G104"]
+        }
+    },
+    "G125": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G125"]
+        }
+    },
+    "G1F3": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G1F3"]
+        }
+    },
+    "G1G3": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G1G3"]
+        }
+    },
+    "G1GH": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["G1GH"]
+    },
+    "GG31": {
+        "Year 2": {
+            "group_a": ["i-Explore"],
+            "group_b": [ "Lebesgue Measure and Integration", "Network Science","PDEs in Action","Principles of Programming","Probability for Statistics", "Statistical Modelling 1"],
+            "guideline": degree_guides["GG31"]
+        }
+    }
+        }
+}
 with tab5:
     st.header("Degree Information")
 
-    # Dropdown for degree selection
-    degree = st.selectbox("Select Degree", ["G100", "G102", "G103", "G104", "G125", "G1F3", "G1G3", "G1GH", "GG31"])
+    # Dropdown for degree selection with full descriptions
+    selected_description = st.selectbox(
+        "Select Degree",
+        options=list(degree_descriptions.values())
+    )
+
+    # Get the degree code from the selected description
+    degree = description_to_code.get(selected_description, "")
 
     # Dropdown for year selection
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
@@ -299,19 +429,30 @@ with tab5:
     if degree and year:
         st.header(f"{degree} - {year}")
 
-        # Display degree-specific module selection guidelines
-        if degree in degree_info and year in degree_info[degree]:
-            st.subheader("Module Selection Guidelines")
-            if "core_modules" in degree_info[degree][year]:
-                st.write("**Core Modules:**")
-                for core_module in degree_info[degree][year]["core_modules"]:
-                    st.write(f"- {core_module}")
-            if "group_a" in degree_info[degree][year]:
-                st.write("**Group A:**")
-                st.write(degree_info[degree][year]["group_a"])
-            if "group_b" in degree_info[degree][year]:
-                st.write("**Group B:**")
-                st.write(degree_info[degree][year]["group_b"])
+        # Display group modules and guideline for Year 2
+        if year == "Year 2":
+            st.subheader("Compulsory Modules")
+            st.write(f"- Analysis II")
+            st.write(f"- Linear Algebra and Numerical Analysis")
+            st.write(f"- Multivariable Calculus and Differential Equations")
+            if degree in degree_info and "Year 2" in degree_info[degree]:
+                group_a_modules = degree_info[degree]["Year 2"].get("group_a", [])
+                group_b_modules = degree_info[degree]["Year 2"].get("group_b", [])
+                guideline = degree_info[degree]["Year 2"].get("guideline", "")
+
+                # Display Group A and Group B modules
+                st.subheader("Group A Modules")
+                for module in group_a_modules:
+                    st.write(f"- {module}")
+
+                st.subheader("Group B Modules")
+                for module in group_b_modules:
+                    st.write(f"- {module}")
+
+                # Display the guideline
+                st.subheader("Module Selection Guideline")
+                st.write(guideline)
+
 
         # Display modules available in the selected year
         if year in modules_by_year:

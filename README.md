@@ -14,8 +14,12 @@ python class.py
 python add_modules.py
 
 
-#run website via Streamlit
-conda activate myenvpy
+#run website via Streamlit:
+cd /Users/zhang/Desktop/mapping-project
+
+conda activate myenv
 streamlit run /Users/zhang/Desktop/mapping-project/main.py
+
+#database connection check
 
 
