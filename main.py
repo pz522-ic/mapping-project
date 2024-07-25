@@ -1,25 +1,18 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import joinedload
-from models import Base, Module, Keyword  # Ensure your models are in a file named `models.py`
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, Table, ForeignKey
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, joinedload
+from models import Module, Keyword  # Ensure models.py contains these definitions
 
 # Database setup
 engine = create_engine('sqlite:///modules.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-
-
-
 # Organize modules by year
 modules_by_year = {
-    "Year 1": [,
+    "Year 1": [
         "Analysis I",
         "Linear Algebra and Group Theory",
         "Calculus and Applications",
@@ -31,7 +24,7 @@ modules_by_year = {
     "Year 2": [
         "Analysis II",
         "M2R Research Project",
-        "Linear Algebra and NUmerical Analysis",
+        "Linear Algebra and Numerical Analysis",
         "Multivariable Calculus and Differential Equations",
         "Groups and Rings",
         "Lebesgue Measure and Integration",
@@ -58,121 +51,28 @@ modules_by_year = {
     ]
 }
 
-# Degree information
-degree_info = {
-    "G100": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    },
-    "G102": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Network Science", "Principles of Programming"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G125": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G1F3": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Partial Differential Equations in Action"],
-            "group_b": "Choose 3 modules from Group B"
-        }
-    },
-    "G1G3": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G1GH": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "GG31": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
-            "group_b": "Choose 2 modules from Group B"
-        }
-    },
-    "G103": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    },
-    "G104": {
-        "year1": {
-            "group_a": "Choose one module from Group A",
-            "group_b": "Choose 4 modules from Group B"
-        },
-        "year2": {
-            "group_a": "Choose one module from Group A (language module if required)",
-            "group_b": "Choose 4 modules from Group B"
-        }
-    }
-}
-
 def get_modules():
     return session.query(Module).all()
 
 def get_module_by_name(name):
     return session.query(Module).filter_by(name=name).first()
 
-# Function to display module details
 def display_module_details(module_name):
-    module = modules_db[module_name]
-    st.markdown(f"""
-    <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-        <h3 style="margin-bottom: 10px;">{module_name}</h3>
-        <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(module['prerequisites']) if module['prerequisites'] else 'None'}</p>
-        <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module['summary']}</p>
-        <p style="margin-bottom: 5px;"><strong>Term:</strong> {module['term']}</p>
-        <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module['lecturer']}</p>
-        <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {', '.join(module['assessments'])}</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-# Function to find available modules based on completed ones
+    module = get_module_by_name(module_name)
+    if module:
+        st.markdown(f"""
+        <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
+            <h3 style="margin-bottom: 10px;">{module.name}</h3>
+            <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {module.prerequisites if module.prerequisites else 'None'}</p>
+            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module.summary}</p>
+            <p style="margin-bottom: 5px;"><strong>Term:</strong> {module.term}</p>
+            <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module.lecturer}</p>
+            <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {module.assessments}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.write("Module not found.")
+
 def find_available_modules(completed_modules):
     available_modules = []
     for module in session.query(Module).all():
@@ -182,11 +82,10 @@ def find_available_modules(completed_modules):
                 available_modules.append(module.name)
     return available_modules
 
-# Function to get prerequisites for selected modules
 def get_prerequisites(modules):
     prerequisites = {}
     for module_name in modules:
-        module = session.query(Module).filter_by(name=module_name).first()
+        module = get_module_by_name(module_name)
         if module:
             prerequisites[module.name] = module.prerequisites.split(', ') if module.prerequisites else []
     return prerequisites
@@ -223,7 +122,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "
 with tab2:
     st.header("Modules Wanted")
     # User selects desired modules
-    desired_modules = st.multiselect("Select the modules you want to take:", options=[module.name for module in session.query(Module).all()])
+    desired_modules = st.multiselect("Select the modules you want to take:", options=[module.name for module in get_modules()])
 
     # Get prerequisites for desired modules
     prerequisites = get_prerequisites(desired_modules)
@@ -241,9 +140,6 @@ with tab2:
     else:
         st.write("Select modules to see their prerequisites.")
 
-
-
-# Tab 1: Module Information by Term
 with tab1:
     st.header("Module Information by Year")
 
@@ -257,33 +153,23 @@ with tab1:
     selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer","Autumn and Spring"])
 
     # Filter modules based on the selected term
-    filtered_modules = [module for module in modules_for_year if selected_term in modules_db[module]["term"]]
+    filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
 
     # Display modules for the selected term
     if filtered_modules:
         for module in filtered_modules:
-            module_details = modules_db[module]
-            st.markdown(f"""
-            <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                <h3 style="margin-bottom: 10px;">{module}</h3>
-                <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(module_details['prerequisites']) if module_details['prerequisites'] else 'None'}</p>
-                <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module_details['summary']}</p>
-                <p style="margin-bottom: 5px;"><strong>Term:</strong> {module_details['term']}</p>
-                <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module_details['lecturer']}</p>
-            </div>
-            """, unsafe_allow_html=True)
+            display_module_details(module)
     else:
         st.write("No modules available for the selected term.")
 
-# Tab 3: Module Relationships
 with tab3:
     st.header("Module Relationships")
 
     # Dropdown for selecting modules taken
-    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + list(modules_db.keys()))
+    taken_modules = st.multiselect("Select Modules Taken", options=["None"] + [module.name for module in get_modules()])
 
     # Dropdown for selecting modules wanted
-    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + list(modules_db.keys()))
+    wanted_modules = st.multiselect("Select Modules Wanted", options=["None"] + [module.name for module in get_modules()])
 
     # Validate selections
     if "None" in taken_modules and "None" in wanted_modules:
@@ -296,8 +182,7 @@ with tab3:
             wanted_modules.remove("None")
 
         # Display the relationships
-        draw_module_graph(modules_db, taken_modules, wanted_modules)
-
+        draw_module_graph(taken_modules, wanted_modules)
 
 with tab4:
     st.header("Assessment Information")
@@ -313,7 +198,7 @@ with tab5:
     year = st.selectbox("Select Year", ["Year 1", "Year 2", "Year 3", "Year 4"])
 
     if degree and year:
-        st.header(f"{degree} - {year}")  # Corrected header format
+        st.header(f"{degree} - {year}")
 
         # Display degree-specific module selection guidelines
         if degree in degree_info and year in degree_info[degree]:
@@ -333,14 +218,5 @@ with tab5:
         if year in modules_by_year:
             st.subheader(f"Modules Available in {year}")
             for module in modules_by_year[year]:
-                st.markdown(f"""
-                <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
-                    <h3 style="margin-bottom: 10px;">{module}</h3>
-                    <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(modules_db[module]['prerequisites']) if modules_db[module]['prerequisites'] else 'None'}</p>
-                    <p style="margin-bottom: 5px;"><strong>Summary:</strong> {modules_db[module]['summary']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Term:</strong> {modules_db[module]['term']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {modules_db[module]['lecturer']}</p>
-                    <p style="margin-bottom: 5px;"><strong>Type:</strong> {modules_db[module]['type']}</p>
-                </div>
-                """, unsafe_allow_html=True)
+                display_module_details(module)
 
