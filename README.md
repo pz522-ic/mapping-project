@@ -11,5 +11,5 @@ SELECT * FROM modules;
 execute code:
 /Users/zhang/Desktop/mapping-project
 python class.py
-python add_module.py
+python add_modules.py
 
