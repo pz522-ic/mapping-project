@@ -1,7 +1,6 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import joinedload
 from models import Base, Module, Keyword  # Ensure your models are in a file named `models.py`
