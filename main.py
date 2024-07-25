@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
-from models import Module, Keyword  # Ensure models.py contains these definitions
+from module_class import Module, Keyword  # Ensure models.py contains these definitions
 
 # Database setup
 engine = create_engine('sqlite:///modules.db')
@@ -49,6 +49,99 @@ modules_by_year = {
         "Mathematical Biology",
         "Quantum Mechanics 1"
     ]
+}
+
+degree_info = {
+    "G100": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        }
+    },
+    "G102": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Network Science", "Principles of Programming"],
+            "group_b": "Choose 2 modules from Group B"
+        }
+    },
+    "G125": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Groups and Rings", "Lebesgue Measure and Integration"],
+            "group_b": "Choose 2 modules from Group B"
+        }
+    },
+    "G1F3": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Partial Differential Equations in Action"],
+            "group_b": "Choose 3 modules from Group B"
+        }
+    },
+    "G1G3": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
+        }
+    },
+    "G1GH": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
+        }
+    },
+    "GG31": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "core_modules": ["Probability for Statistics", "Statistical Modelling 1"],
+            "group_b": "Choose 2 modules from Group B"
+        }
+    },
+    "G103": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        }
+    },
+    "G104": {
+        "year1": {
+            "group_a": "Choose one module from Group A",
+            "group_b": "Choose 4 modules from Group B"
+        },
+        "year2": {
+            "group_a": "Choose one module from Group A (language module if required)",
+            "group_b": "Choose 4 modules from Group B"
+        }
+    }
 }
 
 def get_modules():
