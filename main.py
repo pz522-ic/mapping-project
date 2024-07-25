@@ -19,33 +19,27 @@ session = Session()
 
 # Organize modules by year
 modules_by_year = {
-    "Year 1": [
-        "Introduction to University Math (MATH40001/40009)",
-        "Analysis I (MATH40002)",
-        "Linear Algebra and Group Theory (MATH40003)",
-        "Calculus and Applications (MATH40004)",
-        "Probability and Statistics (MATH40005)",
-        "Introduction to Computation (MATH40006)",
-        "An Introduction to Applied Maths (MATH40007)",
-        "M1R (MATH40008)",
-        "Linear Algebra (JMC) (MATH40012)"
+    "Year 1": [,
+        "Analysis I",
+        "Linear Algebra and Group Theory",
+        "Calculus and Applications",
+        "Probability and Statistics",
+        "Introduction to Computation",
+        "An Introduction to Applied Maths",
+        "M1R Research Project",
     ],
     "Year 2": [
-        "Analysis 2: Real Analysis and Topology (MATH50001/50017)",
-        "Analysis 2: Complex Analysis (MATH50001/50018)",
-        "M2R (MATH50002/MATH50014)",
-        "Linear Algebra (MATH50003/50012)",
-        "Numerical Analysis (MATH50003/50016)",
-        "Multivariable Calculus (MATH50004/50015)",
-        "Differential Equations (MATH50004/50019)",
-        "Groups and Rings (MATH50005)",
-        "Lebesgue Measure and Integration (MATH50006)",
-        "Network Science (MATH50007)",
-        "PDEs in Action (MATH50008)",
-        "Principles of Programming (MATH50009)",
-        "Probability for Statistics (MATH50010)",
-        "Statistical Modelling 1 (MATH50011)",
-        "Probability (JMC) (MATH50013)"
+        "Analysis II",
+        "M2R Research Project",
+        "Linear Algebra and NUmerical Analysis",
+        "Multivariable Calculus and Differential Equations",
+        "Groups and Rings",
+        "Lebesgue Measure and Integration",
+        "Network Science",
+        "PDEs in Action",
+        "Principles of Programming",
+        "Probability for Statistics",
+        "Statistical Modelling 1",
     ],
     "Year 3": [
         "Fluid Dynamics 2",
@@ -260,7 +254,7 @@ with tab1:
     modules_for_year = modules_by_year[selected_year]
 
     # Dropdown for selecting term
-    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
+    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer","Autumn and Spring"])
 
     # Filter modules based on the selected term
     filtered_modules = [module for module in modules_for_year if selected_term in modules_db[module]["term"]]
