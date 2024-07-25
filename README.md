@@ -13,3 +13,8 @@ execute code:
 python class.py
 python add_modules.py
 
+
+#run website via Streamlit
+streamlit run /Users/zhang/Desktop/mapping-project/main.py
+
+

@@ -3,12 +3,13 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
-from module_class import Module, Keyword  
+from module_class import Module, Keyword
 
 # Database setup
 engine = create_engine('sqlite:///modules.db')
 Session = sessionmaker(bind=engine)
 session = Session()
+
 
 # Organize modules by year
 modules_by_year = {
@@ -144,6 +145,7 @@ degree_info = {
     }
 }
 
+
 def get_modules():
     return session.query(Module).all()
 
@@ -153,11 +155,13 @@ def get_module_by_name(name):
 def display_module_details(module_name):
     module = get_module_by_name(module_name)
     if module:
+        # Convert the comma-separated prerequisites string to a list
+        prerequisites = [p.strip() for p in module.prerequisites.split(',') if p.strip()]
         st.markdown(f"""
         <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
             <h3 style="margin-bottom: 10px;">{module.name}</h3>
-            <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {module.prerequisites if module.prerequisites else 'None'}</p>
-            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module.summary}</p>
+            <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(prerequisites) if prerequisites else 'None'}</p>
+            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module.summary if module.summary else 'None'}</p>
             <p style="margin-bottom: 5px;"><strong>Term:</strong> {module.term}</p>
             <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module.lecturer}</p>
             <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {module.assessments}</p>
@@ -166,28 +170,21 @@ def display_module_details(module_name):
     else:
         st.write("Module not found.")
 
-def find_available_modules(completed_modules):
-    available_modules = []
-    for module in session.query(Module).all():
-        prerequisites = module.prerequisites.split(', ') if module.prerequisites else []
-        if module.name not in completed_modules:
-            if all(prereq in completed_modules for prereq in prerequisites):
-                available_modules.append(module.name)
-    return available_modules
-
 def get_prerequisites(modules):
     prerequisites = {}
     for module_name in modules:
         module = get_module_by_name(module_name)
         if module:
-            prerequisites[module.name] = module.prerequisites.split(', ') if module.prerequisites else []
+            # Convert the comma-separated prerequisites string to a list
+            prerequisites[module.name] = [p.strip() for p in module.prerequisites.split(',') if p.strip()]
     return prerequisites
 
 def draw_module_graph(taken_modules=None, wanted_modules=None):
     G = nx.DiGraph()
     for module in session.query(Module).options(joinedload(Module.keywords)).all():
         G.add_node(module.name)
-        prerequisites = module.prerequisites.split(', ') if module.prerequisites else []
+        # Convert the comma-separated prerequisites string to a list
+        prerequisites = [p.strip() for p in module.prerequisites.split(',') if p.strip()]
         for prereq in prerequisites:
             G.add_node(prereq)
             G.add_edge(prereq, module.name)
@@ -312,4 +309,3 @@ with tab5:
             st.subheader(f"Modules Available in {year}")
             for module in modules_by_year[year]:
                 display_module_details(module)
-
