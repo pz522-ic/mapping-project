@@ -90,7 +90,7 @@ add_module(
 add_module(
     session,
     name="M1R Research Project",
-    code="MATH60034/70034",
+    code="MATH40008",
     prerequisites=["None"],
     recommended_prerequisites="None",
     term="Summer",
