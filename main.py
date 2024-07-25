@@ -155,19 +155,24 @@ def get_module_by_name(name):
 def display_module_details(module_name):
     module = get_module_by_name(module_name)
     if module:
-        # Convert the comma-separated prerequisites string to a list
-        prerequisites = [p.strip() for p in module.prerequisites.split(',') if p.strip()]
+        # Set default values if fields are empty
+        summary = module.summary if module.summary else "No summary available."
+        keywords = module.keywords if module.keywords else "No keywords available."
+        
         st.markdown(f"""
         <div style="border: 2px solid #00BFFF; padding: 10px; border-radius: 10px; text-align: left; margin-bottom: 10px; width: 100%;">
             <h3 style="margin-bottom: 10px;">{module.name}</h3>
-            <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {', '.join(prerequisites) if prerequisites else 'None'}</p>
-            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {module.summary if module.summary else 'None'}</p>
+            <p style="margin-bottom: 5px;"><strong>Prerequisites:</strong> {module.prerequisites if module.prerequisites else 'None'}</p>
+            <p style="margin-bottom: 5px;"><strong>Summary:</strong> {summary}</p>
+            <p style="margin-bottom: 5px;"><strong>Keywords:</strong> {keywords}</p>
             <p style="margin-bottom: 5px;"><strong>Term:</strong> {module.term}</p>
             <p style="margin-bottom: 5px;"><strong>Lecturer:</strong> {module.lecturer}</p>
             <p style="margin-bottom: 5px;"><strong>Assessments:</strong> {module.assessments}</p>
         </div>
         """, unsafe_allow_html=True)
     else:
+        st.write("Module not found.")
+
         st.write("Module not found.")
 
 def get_prerequisites(modules):
@@ -239,18 +244,22 @@ with tab1:
     # Get modules for the selected year
     modules_for_year = modules_by_year[selected_year]
 
-    # Dropdown for selecting term
-    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer","Autumn and Spring"])
+    # Dropdown for selecting term with an "All" option
+    selected_term = st.selectbox("Select Term", options=["All", "Autumn", "Spring", "Summer"])
 
-    # Filter modules based on the selected term
-    filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
+    if selected_term == "All":
+        filtered_modules = modules_for_year
+    else:
+        # Filter modules based on the selected term
+        filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
 
-    # Display modules for the selected term
+    # Display modules for the selected term or all modules
     if filtered_modules:
         for module in filtered_modules:
             display_module_details(module)
     else:
-        st.write("No modules available for the selected term.")
+        st.write("No modules available for the selected term or year.")
+
 
 with tab3:
     st.header("Module Relationships")

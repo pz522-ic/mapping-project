@@ -15,6 +15,7 @@ python add_modules.py
 
 
 #run website via Streamlit
+conda activate myenvpy
 streamlit run /Users/zhang/Desktop/mapping-project/main.py
 
 
