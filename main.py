@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
-from module_class import Module, Keyword  # Ensure models.py contains these definitions
+from module_class import Module, Keyword  
 
 # Database setup
 engine = create_engine('sqlite:///modules.db')
