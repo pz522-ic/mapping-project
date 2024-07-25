@@ -1,22 +1,228 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import joinedload
-from models import Base, Module, Keyword  # Ensure your models are in a file named `models.py`
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, Table, ForeignKey
-from sqlalchemy.orm import relationship
-
-
-# Database setup
-engine = create_engine('sqlite:///modules.db')
-Session = sessionmaker(bind=engine)
-session = Session()
 
 
 
+# Updated database of modules
+modules_db = {
+    "Introduction to University Math (MATH40001/40009)": {
+        "prerequisites": [],
+        "summary": "Introduction to university mathematics.",
+        "term": "Autumn",
+        "lecturer": "Marie Amalie Lawn, Eva-Marie Graefe, Charlotte Kestner",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Analysis I (MATH40002)": {
+        "prerequisites": [],
+        "summary": "Introduction to analysis.",
+        "term": "Autumn and Spring",
+        "lecturer": "Ajay Chandra (T1), Marco Guaraco (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Linear Algebra and Group Theory (MATH40003)": {
+        "prerequisites": [],
+        "summary": "Introduction to linear algebra and group theory.",
+        "term": "Autumn and Spring",
+        "lecturer": "Travis Schedler (T1), Michele Zordan (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Calculus and Applications (MATH40004)": {
+        "prerequisites": [],
+        "summary": "Introduction to calculus and its applications.",
+        "term": "Autumn and Spring",
+        "lecturer": "Demetrios Papageorgiou (T1), Vahid Shahrezaei (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Probability and Statistics (MATH40005)": {
+        "prerequisites": [],
+        "summary": "Introduction to probability and statistics.",
+        "term": "Autumn and Spring",
+        "lecturer": "Ioanna Papatsouma (T1), Dean Bodenham (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Introduction to Computation (MATH40006)": {
+        "prerequisites": [],
+        "summary": "Introduction to computation.",
+        "term": "Autumn",
+        "lecturer": "Phil Ramsden",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "An Introduction to Applied Maths (MATH40007)": {
+        "prerequisites": [],
+        "summary": "Introduction to applied mathematics.",
+        "term": "Autumn",
+        "lecturer": "Darren Crowdy",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "M1R (MATH40008)": {
+        "prerequisites": [],
+        "summary": "Mathematics 1 Revision.",
+        "term": "To be confirmed",
+        "lecturer": "Michele Zordan",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Linear Algebra (JMC) (MATH40012)": {
+        "prerequisites": [],
+        "summary": "Linear Algebra for JMC students.",
+        "term": "Autumn and Spring",
+        "lecturer": "Benjamin Briggs (T1) Alexei Skorobogatov (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Analysis 2: Real Analysis and Topology (MATH50001/50017)": {
+        "prerequisites": ["Analysis I"],
+        "summary": "Advanced real analysis and topology.",
+        "term": "Autumn",
+        "lecturer": "Davoud Cheraghi (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Analysis 2: Complex Analysis (MATH50001/50018)": {
+        "prerequisites": ["Analysis I"],
+        "summary": "Complex analysis.",
+        "term": "Spring",
+        "lecturer": "Nattalie Tamam (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "M2R (MATH50002/MATH50014)": {
+        "prerequisites": [],
+        "summary": "Mathematics 2 Revision.",
+        "term": "Autumn and Spring",
+        "lecturer": "Thibault Bertrand",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Linear Algebra (MATH50003/50012)": {
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Advanced linear algebra.",
+        "term": "Autumn",
+        "lecturer": "Martin Liebeck (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Numerical Analysis (MATH50003/50016)": {
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Numerical methods for solving mathematical problems.",
+        "term": "Spring",
+        "lecturer": "Sheehan Olver (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Multivariable Calculus (MATH50004/50015)": {
+        "prerequisites": ["Calculus and Applications"],
+        "summary": "Multivariable calculus.",
+        "term": "Autumn",
+        "lecturer": "Andrew Walton (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Differential Equations (MATH50004/50019)": {
+        "prerequisites": ["Calculus and Applications"],
+        "summary": "Introduction to differential equations.",
+        "term": "Spring",
+        "lecturer": "Martin Rasmussen (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Groups and Rings (MATH50005)": {
+        "prerequisites": ["Linear Algebra and Group Theory"],
+        "summary": "Study of groups and rings.",
+        "term": "Autumn",
+        "lecturer": "Tom Coates (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Lebesgue Measure and Integration (MATH50006)": {
+        "prerequisites": ["Analysis I"],
+        "summary": "Lebesgue measure theory and integration.",
+        "term": "Spring",
+        "lecturer": "Pierre-Francois Rodriguez (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Network Science (MATH50007)": {
+        "prerequisites": [],
+        "summary": "Introduction to network science.",
+        "term": "Spring",
+        "lecturer": "Sarah Ferguson-Briggs (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "PDEs in Action (MATH50008)": {
+        "prerequisites": [],
+        "summary": "Partial differential equations in action.",
+        "term": "Spring",
+        "lecturer": "Thibault Bertrand (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Principles of Programming (MATH50009)": {
+        "prerequisites": [],
+        "summary": "Principles of programming.",
+        "term": "Autumn",
+        "lecturer": "David Ham (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Probability for Statistics (MATH50010)": {
+        "prerequisites": [],
+        "summary": "Probability theory for statistics.",
+        "term": "Autumn",
+        "lecturer": "Ciara Pike-Burke (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Statistical Modelling 1 (MATH50011)": {
+        "prerequisites": [],
+        "summary": "Introduction to statistical modelling.",
+        "term": "Spring",
+        "lecturer": "Riccardo Passeggeri (T2)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Probability (JMC) (MATH50013)": {
+        "prerequisites": [],
+        "summary": "Probability for JMC students.",
+        "term": "Autumn",
+        "lecturer": "Tomasz Kosmala (T1)",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Compulsory"
+    },
+    "Machine Learning (MATH60001)": {
+        "prerequisites": ["Multivariable Calculus", "Linear Algebra and Group Theory"],
+        "summary": "Introduction to machine learning.",
+        "term": "Autumn",
+        "lecturer": "Irene Davis",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Optional"
+    },
+    "Galois Theory (MATH60002)": {
+        "prerequisites": ["Groups and Rings"],
+        "summary": "Advanced Galois theory.",
+        "term": "Spring",
+        "lecturer": "Jack Clark",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Optional"
+    },
+    "Fluid Dynamics I (MATH60003)": {
+        "prerequisites": ["Differential Equations"],
+        "summary": "Introduction to fluid dynamics.",
+        "term": "Autumn",
+        "lecturer": "Karen Martinez",
+        "assessments": ["Exam", "Coursework"],
+        "type": "Optional"
+    }
+}
 
 # Organize modules by year
 modules_by_year = {
@@ -49,19 +255,9 @@ modules_by_year = {
         "Probability (JMC) (MATH50013)"
     ],
     "Year 3": [
-        "Fluid Dynamics 2",
-        "Introduction to Geophysical Fluid Dynamics",
-        "Fluid Dynamics 1",
-        "Asymptotic Methods",
-        "Optimisation",
-        "Applied Complex Analysis",
-        "Dynamics of Learning and Iterated Games",
-        "Dynamical Systems",
-        "Bifurcation Theory",
-        "Geometric Mechanics",
-        "Classical Dynamics",
-        "Mathematical Biology",
-        "Quantum Mechanics 1"
+        "Machine Learning (MATH60001)",
+        "Galois Theory (MATH60002)",
+        "Fluid Dynamics I (MATH60003)"
     ]
 }
 
@@ -159,12 +355,6 @@ degree_info = {
     }
 }
 
-def get_modules():
-    return session.query(Module).all()
-
-def get_module_by_name(name):
-    return session.query(Module).filter_by(name=name).first()
-
 # Function to display module details
 def display_module_details(module_name):
     module = modules_db[module_name]
@@ -180,32 +370,29 @@ def display_module_details(module_name):
     """, unsafe_allow_html=True)
     
 # Function to find available modules based on completed ones
-def find_available_modules(completed_modules):
+def find_available_modules(completed_modules, modules_db):
     available_modules = []
-    for module in session.query(Module).all():
-        prerequisites = module.prerequisites.split(', ') if module.prerequisites else []
-        if module.name not in completed_modules:
+    for module, details in modules_db.items():
+        prerequisites = details["prerequisites"]
+        if module not in completed_modules:
             if all(prereq in completed_modules for prereq in prerequisites):
-                available_modules.append(module.name)
+                available_modules.append(module)
     return available_modules
 
 # Function to get prerequisites for selected modules
-def get_prerequisites(modules):
+def get_prerequisites(modules, modules_db):
     prerequisites = {}
-    for module_name in modules:
-        module = session.query(Module).filter_by(name=module_name).first()
-        if module:
-            prerequisites[module.name] = module.prerequisites.split(', ') if module.prerequisites else []
+    for module in modules:
+        prerequisites[module] = modules_db.get(module, {}).get("prerequisites", [])
     return prerequisites
 
-def draw_module_graph(taken_modules=None, wanted_modules=None):
+def draw_module_graph(modules_db, taken_modules=None, wanted_modules=None):
     G = nx.DiGraph()
-    for module in session.query(Module).options(joinedload(Module.keywords)).all():
-        G.add_node(module.name)
-        prerequisites = module.prerequisites.split(', ') if module.prerequisites else []
-        for prereq in prerequisites:
+    for module, details in modules_db.items():
+        G.add_node(module)
+        for prereq in details["prerequisites"]:
             G.add_node(prereq)
-            G.add_edge(prereq, module.name)
+            G.add_edge(prereq, module)
 
     pos = nx.spring_layout(G)
     plt.figure(figsize=(10, 7))
@@ -230,10 +417,10 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "
 with tab2:
     st.header("Modules Wanted")
     # User selects desired modules
-    desired_modules = st.multiselect("Select the modules you want to take:", options=[module.name for module in session.query(Module).all()])
+    desired_modules = st.multiselect("Select the modules you want to take:", options=list(modules_db.keys()))
 
     # Get prerequisites for desired modules
-    prerequisites = get_prerequisites(desired_modules)
+    prerequisites = get_prerequisites(desired_modules, modules_db)
 
     # Display prerequisites
     st.subheader("Prerequisites needed:")
@@ -247,8 +434,6 @@ with tab2:
             """, unsafe_allow_html=True)
     else:
         st.write("Select modules to see their prerequisites.")
-
-
 
 # Tab 1: Module Information by Term
 with tab1:
