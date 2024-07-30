@@ -54,7 +54,8 @@ modules_by_year = {
         "Geometric Mechanics",
         "Classical Dynamics",
         "Mathematical Biology",
-        "Quantum Mechanics 1"
+        "Quantum Mechanics 1",
+        
     ]
 }
 
