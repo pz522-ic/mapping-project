@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from module_class import Module, Keyword, Base  # Adjust the import based on your file structure
+from module_class import Module, Keyword, Base 
 
 # Database setup
 DATABASE_URL = 'sqlite:///modules.db'  
@@ -11,7 +11,7 @@ Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Function to scrape keywords from the website
+# scrape keywords from the website
 def scrape_keywords():
     base_url = "https://blastzit.eu.pythonanywhere.com"
     response = requests.get(base_url)

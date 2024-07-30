@@ -9,6 +9,7 @@ cd /Users/zhang/Desktop/mapping-project
 sqlite3 modules.db
 .tables
 SELECT * FROM modules;
+SELECT * FROM keywords;
 
 
 execute code:
