@@ -23,6 +23,6 @@ cd /Users/zhang/Desktop/mapping-project
 conda activate myenv
 streamlit run /Users/zhang/Desktop/mapping-project/main.py
 
-#database connection check
+#database connection check: prints "Database connection is successful." if connection successful.
 
 
