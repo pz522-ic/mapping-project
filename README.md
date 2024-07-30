@@ -2,7 +2,7 @@
 
 
 
-requirements.txt: specify the dependencies that are needed to run the project
+requirements.txt: specifies the dependencies that are needed to run the project
 To view the database use terminal:
 
 cd /Users/zhang/Desktop/mapping-project
