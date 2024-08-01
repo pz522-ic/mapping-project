@@ -41,23 +41,75 @@ modules_by_year = {
         "Statistical Modelling 1",
         "i-Explore"
     ],
-    "Year 3": [
-        "Fluid Dynamics 2",
-        "Introduction to Geophysical Fluid Dynamics",
-        "Fluid Dynamics 1",
-        "Asymptotic Methods",
-        "Optimisation",
-        "Applied Complex Analysis",
-        "Dynamics of Learning and Iterated Games",
-        "Dynamical Systems",
-        "Bifurcation Theory",
-        "Geometric Mechanics",
-        "Classical Dynamics",
-        "Mathematical Biology",
-        "Quantum Mechanics 1",
-        
-    ]
+    "Year 3": {
+        "Pure Math": [
+            "Probability Theory",
+            "Functional Analysis",
+            "Fourier Analysis and the Theory of Distributions",
+            "Markov Processes",
+            "Geometry of Curves and Surfaces",
+            "Algebraic Curve",
+            "Algebra 3",
+            "Group Theory",
+            "Galois Theory",
+            "Graph Theory",
+            "Group Representation Theory",
+            "Formalising Mathematics",
+            "Number Theory",
+            "Algebraic Number Theory",
+            "Mathematical Logic",
+            "Geometric Complex Analysis"
+        ],
+        "Applied Math": [
+            "Fluid Dynamics 2",
+            "Applied Complex Analysis",
+            "Bifurcation Theory",
+            "Geometric Mechanics",
+            "Classical Dynamics",
+            "Mathematical Biology",
+            "Introduction to Geophysical Fluid Dynamics",
+            "Asymptotic Methods",
+            "Optimisation",
+            "Dynamics of Learning and Iterated Games",
+            "Dynamical Systems",
+            "Quantum Mechanics 1",
+            "Special Relativity and Electromagnetism",
+            "Tensor Calculuss and General Relativity",
+            "Quantum Mechanics 2",
+            "Theory of Partial Differential Equations",
+            "Function Spaces and Applications",
+            "Advanced Topics in Partial Differential Equations",
+            "Finite Elements: Numerical Analysis and Implementation",
+            "Computational Dynamical Systems",
+            "Computational Linear Algebra",
+            "Computational Partial Differential Equations",
+            "Methods for Data Science",
+            "Scientific Computation",
+            "Mathematical Biology 2: Systems Biology",
+            "Introduction to Game Theory"
+
+        ],
+        "Math Finance": [
+            "Mathematical Finance: An Introduction to Option Pricing",
+            "Stochastic Differential Equations in Financial Modelling",
+            "Rough Paths and Applications to Machine Learning"
+        ],
+        "Statistics": [
+            "Statistical Theory",
+            "Applied Statistical Inference",
+            "Applied Probability",
+            "Time Series Analysis",
+            "Stochastic Simulation",
+            "Survival Models",
+            "Introduction to Statistical Learning",
+            "Spatial Statistics",
+            "Mathematics of Business and Economics"
+        ]
+    }
 }
+
+
+## degree info for tab5
 
 degree_info = {
     "G100": {
@@ -140,7 +192,7 @@ degree_info = {
             "group_b": "Choose 4 modules from Group B"
         }
     },
-    #Year 2 Module Groups
+    #Year 2 Module Groups for tab5
     "group_a":{
         "i-Explore"
     },
@@ -161,6 +213,10 @@ def get_modules():
 
 def get_module_by_name(name):
     return session.query(Module).filter_by(name=name).first()
+
+def get_module_by_code(code):
+    return session.query(Module).filter_by(code=code).first()
+
 
 
 # session state for selected module
@@ -201,6 +257,8 @@ def get_prerequisites(modules):
             prerequisites[module.name] = [p.strip() for p in module.prerequisites.split(',') if p.strip()]
     return prerequisites
 
+
+## draw module relationship graph with tab3
 def draw_module_graph(taken_modules=None, wanted_modules=None):
     G = nx.DiGraph()
     for module in session.query(Module).options(joinedload(Module.keywords)).all():
@@ -232,8 +290,51 @@ st.title("Module Management System")
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Module Information", "Module Wanted", "Module Relationships", "Assessment Information", "Degree Information"])
 
 
+with tab1:
+    st.header("Module Information by Year")
 
+    # Dropdown for selecting year
+    selected_year = st.selectbox("Select Year", options=list(modules_by_year.keys()))
+      # Dropdown for selecting term
+    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
 
+    if selected_year == "Year 3" and selected_term in ["Autumn", "Spring"]:
+        # Get categories and modules for Year 3
+        year_3_categories = modules_by_year[selected_year]
+
+        for category, modules in year_3_categories.items():
+            st.subheader(category)
+            filtered_modules = [
+                module for module in modules
+                if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')
+            ]
+
+            if filtered_modules:
+                for module in filtered_modules:
+                    module_name = module  # Get the module name
+                    with st.expander(module_name):
+                        display_module_details(module_name)
+            else:
+                st.write(f"No modules available for {selected_term} term in {category}.")
+
+    else:
+        # Get modules for the selected year
+        modules_for_year = modules_by_year[selected_year]
+
+        # Filter modules based on the selected term
+        filtered_modules = [
+            module for module in modules_for_year
+            if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')
+        ]
+
+        # Display modules for the selected term
+        if filtered_modules:
+            for module in filtered_modules:
+                module_name = module  
+                with st.expander(module_name):
+                    display_module_details(module_name)
+        else:
+            st.write("No modules available for the selected term.")
 
 with tab2:
     st.header("Modules Wanted")
@@ -256,29 +357,7 @@ with tab2:
     else:
         st.write("Select modules to see their prerequisites.")
 
-with tab1:
-    st.header("Module Information by Year")
 
-    # Dropdown for selecting year
-    selected_year = st.selectbox("Select Year", options=list(modules_by_year.keys()))
-
-    # Get modules for the selected year
-    modules_for_year = modules_by_year[selected_year]
-
-    # Dropdown for selecting term
-    selected_term = st.selectbox("Select Term", options=["Autumn", "Spring", "Summer"])
-
-    # Filter modules based on the selected term
-    filtered_modules = [module for module in modules_for_year if selected_term in (get_module_by_name(module).term if get_module_by_name(module) else '')]
-
-    # Display modules for the selected term
-    if filtered_modules:
-        for module in filtered_modules:
-            module_name = module  # Get the module name
-            with st.expander(module_name):
-                display_module_details(module_name)
-    else:
-        st.write("No modules available for the selected term.")
 
 with tab3:
     st.header("Module Relationships")
@@ -301,6 +380,7 @@ with tab3:
 
         # Display the relationships
         draw_module_graph(taken_modules, wanted_modules)
+
 
 with tab4:
     st.header("Assessment Information")

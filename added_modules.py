@@ -180,6 +180,7 @@ add_module(
 
 
 # Year 3
+## Applied Math
 add_module(
     session,
     name="Algebraic Topology",
@@ -339,4 +340,469 @@ add_module(
     assessments=["Poster:80% Presentation:20%"]
 )
 
+
+add_module(
+    session,
+    name="Quantum Mechanics 2",
+    code="MATH60017/70017",
+    prerequisites=["Calculus and Applications","Quantum Mechanics 1"],
+    recommended_prerequisites=["PDEs in Action","Special Relativity and Electromagnetism"],
+    term="Spring",
+    lecturer="Ryan Barnett",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Theory of Partial Differential Equations",
+    code="MATH60019/70019",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations","PDEs in Action"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Massimo Sorella",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Function Spaces and Applications",
+    code="MATH60020/70020",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="PDEs in Action",
+    term="Autumn",
+    lecturer="Pierre Germain",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Advanced Topics in Partial Differential Equations",
+    code="MATH60021/70021",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="PDEs in Action",
+    term="Spring",
+    lecturer="Angeliki Menegaki",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Computational Dynamical Systems",
+    code="MATH60023/70023",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="PDEs in Action",
+    term="Autumn",
+    lecturer="Eric Keaveny",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Computational Linear Algebra",
+    code="MATH60024/70024",
+    prerequisites=["Calculus and Applications","Linear  Algebrea and Numerical Analysis"],
+    recommended_prerequisites="PDEs in Action",
+    term="Autumn",
+    lecturer="Colin Cotter",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Computational Partial Differential Equations",
+    code="MATH60025/70025",
+    prerequisites=["Calculus and Applications","PDEs in Action"],
+    recommended_prerequisites="PDEs in Action",
+    term="Spring",
+    lecturer="Shahid Mughal",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+add_module(
+    session,
+    name="Methods for Data Science",
+    code="MATH60026/70026",
+    prerequisites=["Introduction to Computation"],
+    recommended_prerequisites="Principles of Programming",
+    term="Spring",
+    lecturer="Barbara Bravi",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+add_module(
+    session,
+    name="Scientific Computation",
+    code="MATH60027/70027",
+    prerequisites=["Calculus and Applications","Linear  Algebrea and Numerical Analysis"],
+    recommended_prerequisites="PDEs in Action",
+    term="Autumn",
+    lecturer="Prasun Ray",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+add_module(
+    session,
+    name="Mathematical Biology 2: Systems Biology",
+    code="MATH60137/70137",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="PDEs in Action",
+    term="Spring",
+    lecturer="Omar Karin",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Introduction to Game Theory",
+    code="MATH60141/70141",
+    prerequisites=["Probability and Statistics","Calculus nad Applications"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Sam Brzezicki",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+# Year 3 
+##Math finance
+add_module(
+    session,
+    name="Mathematical Finance: An Introduction to Option Pricing",
+    code="MATH60012/70012",
+    prerequisites=["Probability and Statistics","Calculus nad Applications"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Pietro Siorpaes",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Stochastic Differential Equations in Financial Modelling",
+    code="MATH60130/70130",
+    prerequisites=["Probability and Statistics","Calculus and Applications"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Damiano Brigo",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Rough Paths and Applications to Machine Learning",
+    code="MATH60138/70138",
+    prerequisites=["Probability and Statistics","Calculus nad Applications"],
+    recommended_prerequisites="Methods for Data Science",
+    term="Spring",
+    lecturer="Chris Salvi",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+    
+# Year 3 
+##Pure Maths
+add_module(
+    session,
+    name="Probability Theory",
+    code="MATH60028/70028",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="Lebesgue Measure and Integration",
+    term="Autumn",
+    lecturer="Ajay Chandra",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Functional Analysis",
+    code="MATH60029/70029",
+    prerequisites=["Probability and Statistics","Analysis I"],
+    recommended_prerequisites="Lebesgue Measure and Integration",
+    term="Spring",
+    lecturer="Pierre-Francois Rodriguez",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Fourier Analysis and the Theory of Distributions",
+    code="MATH60030/70030",
+    prerequisites=["Calculus and Applications"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Igor Krasovsky",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Markov Processes",
+    code="MATH60031/70031",
+    prerequisites=["Probability and Statistics","Probability for Statistics"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Zhiyuan Zhang",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Geometry of Curves and Surfaces",
+    code="MATH60032/70032",
+    prerequisites=["Calculus and Applications"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Steven Sivek",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Algebraic Curves",
+    code="MATH60033/70033",
+    prerequisites=["Calculus and Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Soheyla Feyzbakhsh",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Algebraic Topology",
+    code="MATH60034/70034",
+    prerequisites=["Calculus nad Applications","Multivariate Calculus and Differential Equations"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Sara Veneziale",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Algebra 3",
+    code="MATH60035/70035",
+    prerequisites=["Groups and Rings"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Alessio Corti",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Group Theory",
+    code="MATH60036/70036",
+    prerequisites=["Groups and Rings"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Martin Liebeck",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Galois Theory",
+    code="MATH60037/70037",
+    prerequisites=["Groups and Rings"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Alexei Skorobogatov",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Graph Theory",
+    code="MATH60038/70038",
+    prerequisites=["Groups and Rings"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Michele Zordan",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Group Representation Theory",
+    code="MATH60039/70039",
+    prerequisites=["Groups and Rings"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Heather MacBeth",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Formalising Mathematics",
+    code="MATH60040/70040",
+    prerequisites="None",
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Bhavik Mehta",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Number Theory",
+    code="MATH60041/70041",
+    prerequisites="None",
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Ambrus Pal",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Algebraic Number Theory",
+    code="MATH60042/70042",
+    prerequisites="None",
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Margherita Pagano",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Mathematical Logic",
+    code="MATH60132/70132",
+    prerequisites="None",
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="David Evans",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Geometric Complex Analysis",
+    code="MATH60140/70140",
+    prerequisites=["Analysis II"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Davoud Cheraghi",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+#Year 3
+##Statistics
+
+add_module(
+    session,
+    name="Statistical Theory",
+    code="MATH60043/70043",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Kolyan Ray",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+
+add_module(
+    session,
+    name="Applied Statistical Inference",
+    code="MATH60044/70044",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Chris Hallsworth",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Applied Probability",
+    code="MATH60045/70045",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Robin Ryder",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Time Series Analysis",
+    code="MATH60046/70046",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Ed Cohen",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+
+add_module(
+    session,
+    name="Stochastic Simulation",
+    code="MATH60047/70047",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Deniz Akyildiz",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Survival Models",
+    code="MATH60048/70048",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Autumn",
+    lecturer="Heather Battey",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Introduction to Statistical Learning",
+    code="MATH60049/70049",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Guy Nason",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Spatial Statistics",
+    code="MATH60139/70139",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Adam Sykulski",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="Mathematics of Business and Economics",
+    code="MATH60142/70142",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="Max Autenrieth",
+    assessments=["Exam:90%, Coursework:10%"]
+)
+
+add_module(
+    session,
+    name="M3R",
+    code="MATH60050",
+    prerequisites=["Probability and Statistics"],
+    recommended_prerequisites="None",
+    term="Spring",
+    lecturer="None",
+    assessments=["Paper:90%, presentation:10%"]
+)
 

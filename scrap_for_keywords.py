@@ -2,16 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from module_class import Module, Keyword, Base 
+from module_class import Module, Keyword, Base
 
 # Database setup
-DATABASE_URL = 'sqlite:///modules.db'  
+DATABASE_URL = 'sqlite:///modules.db'
 engine = create_engine(DATABASE_URL)
 Base.metadata.bind = engine
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# scrape keywords from the website
+# Scrape keywords from the website
 def scrape_keywords():
     base_url = "https://blastzit.eu.pythonanywhere.com"
     response = requests.get(base_url)
@@ -20,7 +20,7 @@ def scrape_keywords():
     modules = []
     for link in soup.find_all('a', href=True):
         if "module" in link['href']:
-            module_url = f"{base_url}/{link['href']}"
+            module_url = f"{base_url}{link['href']}"  # Ensure the URL is correctly constructed
             module_response = requests.get(module_url)
             module_soup = BeautifulSoup(module_response.content, 'html.parser')
 
@@ -29,29 +29,33 @@ def scrape_keywords():
             keywords_element = module_soup.find(text="Keywords").find_next()
 
             if code_element and keywords_element:
-                code = code_element.get_text(strip=True).replace('MATH', 'M').replace('/', '_')
-                keywords = keywords_element.get_text(strip=True).split(',')
+                raw_code = code_element.get_text(strip=True)
+                code = raw_code.replace('MATH', 'M').replace('/', '_')
+                keywords = [k.strip() for k in keywords_element.get_text(strip=True).split(',')]
                 modules.append((code, keywords))
 
     return modules
 
-# Function to update database with keywords
+# Function to update the database with keywords
 def update_database(modules):
     for code, keywords in modules:
         # Find the module in the database by code
         module = session.query(Module).filter(Module.code == code).first()
         if module:
-            # Add keywords to the module
-            for keyword in keywords:
-                keyword = keyword.strip()
-                existing_keyword = session.query(Keyword).filter(Keyword.keyword == keyword).first()
+            for keyword_text in keywords:
+                existing_keyword = session.query(Keyword).filter(Keyword.keyword == keyword_text).first()
                 if not existing_keyword:
                     # Create new keyword if it doesn't exist
-                    new_keyword = Keyword(keyword=keyword)
+                    new_keyword = Keyword(keyword=keyword_text)
+                    session.add(new_keyword)
+                    session.commit()  # Commit to get the ID for the relationship
                     module.keywords.append(new_keyword)
                 else:
-                    module.keywords.append(existing_keyword)
+                    if existing_keyword not in module.keywords:
+                        module.keywords.append(existing_keyword)
             session.commit()
+        else:
+            print(f"Module with code {code} not found in the database.")
 
 # Main function
 def main():
